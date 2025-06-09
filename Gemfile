@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'jekyll', '~> 4.0'
-gem 'jekyll-dash', '~> 2'
-gem 'jekyll-feed'
-gem 'jekyll-sitemap'
+gem 'jekyll', '~> 4.2'
+gem 'jekyll-dash', '~> 2.0'
+gem 'jekyll-feed', '~> 0.15'
+gem 'jekyll-sitemap', '~> 1.4'
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
 platforms :mingw, :x64_mingw, :mswin, :jruby do
-  gem "tzinfo", "~> 1.2"
+  gem "tzinfo", ">= 1", "< 3"
   gem "tzinfo-data"
 end
 
