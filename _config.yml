@@ -11,6 +11,7 @@ paginate_path: "/blog/page:num/"
 author:
   name: devnomadic
   github: devnomadic
+  email: drew@devnomadic.com
   bio: "Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
   avatar: "/assets/avatar.gif"
   
@@ -24,7 +25,8 @@ plugins:
 # Social links
 social:
   github: devnomadic
-  twitter: devnomadic
+  linkedin: drewkennedy
+  email: drew@devnomadic.com
 
 # Theme settings
 dash:
@@ -36,9 +38,12 @@ dash:
     - url: https://github.com/devnomadic
       icon: github-square
       color: purple
-    - url: https://twitter.com/devnomadic
-      icon: twitter-square  
-      color: cyan
+    - url: https://www.linkedin.com/in/drewkennedy
+      icon: linkedin-square  
+      color: blue
+    - url: mailto:drew@devnomadic.com
+      icon: envelope-square
+      color: green
   disqus:
     shortname: devnomadic
 
