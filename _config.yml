@@ -36,13 +36,13 @@ dash:
   avatar_path: "/assets/avatar.gif"
   social_links:
     - url: https://github.com/devnomadic
-      icon: github-square
+      icon: fa-github
       color: purple
     - url: https://www.linkedin.com/in/drewkennedy
-      icon: linkedin-square  
+      icon: fa-linkedin
       color: blue
     - url: mailto:drew@devnomadic.com
-      icon: envelope-square
+      icon: fa-envelope
       color: green
   # disqus:
   #   shortname: devnomadic
