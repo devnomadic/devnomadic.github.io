@@ -20,6 +20,13 @@ jobs:
   build-preview:
     runs-on: ubuntu-latest
     if: github.event.action != 'closed'
+    environment:
+      name: github-pages-preview
+      url: https://devnomadic.github.io/preview/${{ steps.branch-info.outputs.branch-name }}/
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,13 +58,21 @@ jobs:
         env:
           JEKYLL_ENV: production
           
-      - name: Deploy to GitHub Pages preview
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Pages for preview
+        id: pages-preview
+        uses: actions/configure-pages@v4
+        
+      - name: Create preview directory structure
+        run: |
+          mkdir -p preview-site/preview/${{ steps.branch-info.outputs.branch-name }}
+          cp -r _site/* preview-site/preview/${{ steps.branch-info.outputs.branch-name }}/
+          
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          destination_dir: preview/${{ steps.branch-info.outputs.branch-name }}
-          keep_files: true
+          name: preview-site-${{ steps.branch-info.outputs.branch-name }}
+          path: preview-site/
+          retention-days: 7
           
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
