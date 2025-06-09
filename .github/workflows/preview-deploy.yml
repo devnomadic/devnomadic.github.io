@@ -10,20 +10,19 @@ on:
       - preview/*
       - staging
 
+# Recommended concurrency group for preview-pages action
+concurrency:
+  group: preview-pages-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
-  pages: write
-  id-token: write
 
 jobs:
   build-preview:
     runs-on: ubuntu-latest
     if: github.event.action != 'closed'
-    permissions:
-      contents: write
-      pages: write
-      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,95 +33,17 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
           
-      - name: Get branch/PR info
-        id: branch-info
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "branch-name=pr-${{ github.event.number }}" >> $GITHUB_OUTPUT
-            echo "is-pr=true" >> $GITHUB_OUTPUT
-          else
-            branch_name="${{ github.ref_name }}"
-            safe_branch=$(echo "$branch_name" | sed 's/[^a-zA-Z0-9-]/-/g' | tr '[:upper:]' '[:lower:]')
-            echo "branch-name=$safe_branch" >> $GITHUB_OUTPUT
-            echo "is-pr=false" >> $GITHUB_OUTPUT
-          fi
-          
       - name: Build with Jekyll for preview
         run: |
           bundle exec jekyll build --destination ./_site
-          # Remove CNAME file from preview builds to avoid routing conflicts
-          rm -f ./_site/CNAME
         env:
           JEKYLL_ENV: production
           
-      - name: Deploy to preview path
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy Preview Pages
+        uses: rajyan/preview-pages@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          destination_dir: preview/${{ steps.branch-info.outputs.branch-name }}
-          keep_files: true
-          
-      - name: Upload preview artifact (backup)
-        uses: actions/upload-artifact@v4
-        with:
-          name: preview-site-${{ steps.branch-info.outputs.branch-name }}
-          path: ./_site
-          retention-days: 7
-          
-      - name: Comment on PR with preview info
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const prNumber = context.issue.number;
-            const runId = context.runId;
-            const branchName = "${{ steps.branch-info.outputs.branch-name }}";
-            
-            github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: prNumber,
-              body: `🚀 **Preview Build Complete!**
-              
-              Your preview has been deployed and is ready for testing.
-              
-              **Live Preview:** https://devnomadic.com/preview/${branchName}/
-              
-              **Alternative - Download & Test Locally:**
-              1. Go to [Actions Run #${runId}](https://github.com/${owner}/${repo}/actions/runs/${runId})
-              2. Download the \`preview-site-${branchName}\` artifact (backup)
-              3. Extract and serve: \`cd extracted-folder && python3 -m http.server 8000\`
-              4. Open http://localhost:8000 in your browser
-              
-              🔄 This preview updates automatically with each commit to this PR.`
-            });
-
-  cleanup-preview:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    permissions:
-      contents: write
-      pages: write
-    steps:
-      - name: Checkout gh-pages
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          
-      - name: Remove preview directory
-        run: |
-          if [ -d "preview/pr-${{ github.event.number }}" ]; then
-            rm -rf preview/pr-${{ github.event.number }}
-            echo "Removed preview directory for PR #${{ github.event.number }}"
-          else
-            echo "Preview directory for PR #${{ github.event.number }} not found"
-          fi
-          
-      - name: Deploy cleanup
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          keep_files: true
+          source-dir: ./_site
+          configured-domain: devnomadic.com
+          target-dir: preview
+          pr-comment: sticky
+          branch-comment: each
