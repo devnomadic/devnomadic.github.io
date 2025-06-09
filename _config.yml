@@ -12,7 +12,7 @@ author:
   name: devnomadic
   github: devnomadic
   bio: "Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
-  avatar: "/assets/avatar.svg"
+  avatar: "/assets/avatar.gif"
   
 # Build settings
 markdown: kramdown
@@ -31,7 +31,7 @@ dash:
   date_format: "%b %-d, %Y"
   show_author: true
   avatar_source: "local"
-  avatar_path: "/assets/avatar.svg"
+  avatar_path: "/assets/avatar.gif"
   social_links:
     - url: https://github.com/devnomadic
       icon: github-square
