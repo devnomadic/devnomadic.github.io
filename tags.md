@@ -6,22 +6,14 @@ permalink: /tags/
 
 # All Tags
 
-{% capture tags %}
-  {% for tag in site.tags %}
-    {{ tag[1].size | plus: 1000 }}#{{ tag[0] }}#{{ tag[1].size }}
-  {% endfor %}
-{% endcapture %}
-{% assign sortedtags = tags | split:' ' | sort | reverse %}
-
+{% assign tags = site.tags | sort %}
 <div class="tag-cloud">
-{% for tag in sortedtags %}
-  {% assign tagitems = tag | split: '#' %}
-  {% capture tagname %}{{ tagitems[1] }}{% endcapture %}
-  {% capture tagcount %}{{ tagitems[2] }}{% endcapture %}
-  
+{% for tag in tags %}
+  {% assign tagname = tag[0] %}
+  {% assign posts = tag[1] %}
   <span class="tag-item">
-    <a href="#{{ tagname | slugify }}" class="tag-link" data-count="{{ tagcount }}">
-      {{ tagname }} ({{ tagcount }})
+    <a href="#{{ tagname | slugify }}" class="tag-link" data-count="{{ posts.size }}">
+      {{ tagname }} ({{ posts.size }})
     </a>
   </span>
 {% endfor %}
@@ -31,7 +23,7 @@ permalink: /tags/
 
 ## Posts by Tag
 
-{% for tag in site.tags %}
+{% for tag in tags %}
   {% assign tagname = tag[0] %}
   {% assign posts = tag[1] %}
   
