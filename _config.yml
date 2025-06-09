@@ -22,12 +22,6 @@ plugins:
   - jekyll-sitemap
   - jekyll-paginate
 
-# Social links
-social:
-  github: devnomadic
-  linkedin: drewkennedy
-  email: drew@devnomadic.com
-
 # Theme settings
 dash:
   date_format: "%b %-d, %Y"
@@ -36,14 +30,15 @@ dash:
   avatar_path: "/assets/avatar.gif"
   social_links:
     - url: https://github.com/devnomadic
-      icon: fa-github
+      icon: github
       color: purple
     - url: https://www.linkedin.com/in/drewkennedy
-      icon: fa-linkedin
+      icon: linkedin
       color: blue
     - url: mailto:drew@devnomadic.com
-      icon: fa-envelope
+      icon: envelope
       color: green
+      fa: true
   # disqus:
   #   shortname: devnomadic
 
