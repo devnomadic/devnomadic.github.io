@@ -44,6 +44,6 @@ dash:
     - url: mailto:drew@devnomadic.com
       icon: envelope-square
       color: green
-  disqus:
-    shortname: devnomadic
+  # disqus:
+  #   shortname: devnomadic
 
