@@ -4,6 +4,7 @@ gem 'jekyll', '~> 4.2'
 gem 'jekyll-dash', '~> 2.0'
 gem 'jekyll-feed', '~> 0.15'
 gem 'jekyll-sitemap', '~> 1.4'
+gem 'jekyll-tagging', '~> 1.1'
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.

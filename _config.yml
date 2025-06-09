@@ -13,6 +13,12 @@ markdown: kramdown
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-tagging
+
+# Tag settings
+tag_page_layout: tag_page
+tag_page_dir: tags
+tag_permalink_style: pretty
 
 # Navigation
 nav:
@@ -22,6 +28,8 @@ nav:
     url: /about/
   - title: Archive
     url: /archive/
+  - title: Tags
+    url: /tags/
 
 # Social links
 social:
