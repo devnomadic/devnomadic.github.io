@@ -1,7 +1,7 @@
 theme: jekyll-dash
 title: devnomadic
 description: Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere.
-url: "https://devnomadic.com"
+url: "https://devnomadic.github.io"
 baseurl: ""
 
 # Jekyll pagination (required for home page)
