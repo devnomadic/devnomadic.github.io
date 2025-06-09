@@ -50,6 +50,8 @@ jobs:
       - name: Build with Jekyll for preview
         run: |
           bundle exec jekyll build --destination ./_site
+          # Remove CNAME file from preview builds to avoid routing conflicts
+          rm -f ./_site/CNAME
         env:
           JEKYLL_ENV: production
           
