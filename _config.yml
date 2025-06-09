@@ -1,1 +1,35 @@
-theme: jekyll-theme-minimal
+theme: jekyll-dash
+title: devnomadic
+description: Software engineer and digital nomad sharing insights on remote work, travel, and technology
+url: "https://devnomadic.com"
+baseurl: ""
+
+author:
+  name: devnomadic
+  github: devnomadic
+  
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Navigation
+nav:
+  - title: Home
+    url: /
+  - title: About
+    url: /about/
+  - title: Archive
+    url: /archive/
+
+# Social links
+social:
+  github: devnomadic
+  twitter: devnomadic
+
+# Theme settings
+dash:
+  date_format: "%b %-d, %Y"
+  disqus:
+    shortname: devnomadic
