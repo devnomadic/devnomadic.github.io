@@ -1,0 +1,68 @@
+/* Custom styles for devnomadic */
+
+/* Post tags styling */
+.post-tags {
+  margin: 0.5rem 0;
+}
+
+.post-tags .tag {
+  display: inline-block;
+  background-color: #f1f3f4;
+  color: #5f6368;
+  padding: 0.2rem 0.5rem;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.post-tags .tag:hover {
+  background-color: #e8eaed;
+  color: #202124;
+}
+
+/* Tag cloud styling */
+.tag-cloud .tag-item {
+  display: inline-block;
+  margin: 0.2rem 0.5rem 0.2rem 0;
+}
+
+.tag-cloud .tag-link {
+  background-color: #f8f9fa;
+  color: #5f6368;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.tag-cloud .tag-link:hover {
+  background-color: #e8eaed;
+  color: #202124;
+  transform: translateY(-1px);
+}
+
+/* Post link wrapper styling */
+.post-link-wrapper {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.post-link-wrapper:last-child {
+  border-bottom: none;
+}
+
+.post-meta {
+  margin-top: 0.5rem;
+  color: #5f6368;
+  font-size: 0.9rem;
+}
+
+.post-excerpt {
+  margin-top: 0.5rem;
+  color: #202124;
+  line-height: 1.5;
+}
