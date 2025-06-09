@@ -1,0 +1,10 @@
+{% assign site_tags = site.tags | sort %}
+{% assign tag_count = site_tags | size %}
+{% if tag_count > 0 %}
+<h2>all tags</h2>
+<div class="tag-cloud">
+  {% for tag in site_tags %}
+    <a href="/tags#{{ tag[0] | slugify }}" class="tag">{{ tag[0] }}</a>
+  {% endfor %}
+</div>
+{% endif %}

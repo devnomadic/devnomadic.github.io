@@ -1,0 +1,42 @@
+# Local development config to avoid SASS issues
+theme: jekyll-dash
+title: devnomadic
+description: Software engineer and digital nomad sharing insights on remote work, travel, and technology
+url: "http://localhost:4000"
+baseurl: ""
+
+author:
+  name: devnomadic
+  github: devnomadic
+  
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Disable SASS for local development to avoid native gem issues
+sass:
+  style: expanded
+
+# Navigation
+nav:
+  - title: Home
+    url: /
+  - title: About
+    url: /about/
+  - title: Archive
+    url: /archive/
+  - title: Tags
+    url: /tags/
+
+# Social links
+social:
+  github: devnomadic
+  twitter: devnomadic
+
+# Theme settings
+dash:
+  date_format: "%b %-d, %Y"
+  disqus:
+    shortname: devnomadic

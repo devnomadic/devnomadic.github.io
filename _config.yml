@@ -1,29 +1,25 @@
 theme: jekyll-dash
 title: devnomadic
-description: Software engineer and digital nomad sharing insights on remote work, travel, and technology
+description: Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere.
 url: "https://devnomadic.com"
 baseurl: ""
+
+# Jekyll pagination (required for home page)
+paginate: 5
+paginate_path: "/blog/page:num/"
 
 author:
   name: devnomadic
   github: devnomadic
+  bio: "Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
+  avatar: "/assets/avatar.svg"
   
 # Build settings
 markdown: kramdown
 plugins:
   - jekyll-feed
   - jekyll-sitemap
-
-# Navigation
-nav:
-  - title: Home
-    url: /
-  - title: About
-    url: /about/
-  - title: Archive
-    url: /archive/
-  - title: Tags
-    url: /tags/
+  - jekyll-paginate
 
 # Social links
 social:
@@ -33,5 +29,15 @@ social:
 # Theme settings
 dash:
   date_format: "%b %-d, %Y"
+  show_author: true
+  avatar_source: "local"
+  avatar_path: "/assets/avatar.svg"
+  social_links:
+    - url: https://github.com/devnomadic
+      icon: github-square
+      color: purple
+    - url: https://twitter.com/devnomadic
+      icon: twitter-square  
+      color: cyan
   disqus:
     shortname: devnomadic
