@@ -51,36 +51,13 @@ jobs:
         env:
           JEKYLL_ENV: production
           
-      - name: Deploy to preview branch
-        run: |
-          # Configure git
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Clone the repository to a temporary directory
-          git clone https://github.com/${{ github.repository }}.git temp-repo
-          cd temp-repo
-          
-          # Check if gh-pages branch exists, create if not
-          if git ls-remote --exit-code --heads origin gh-pages; then
-            git checkout gh-pages
-          else
-            git checkout --orphan gh-pages
-            git rm -rf .
-          fi
-          
-          # Create preview directory structure
-          mkdir -p preview/${{ steps.branch-info.outputs.branch-name }}
-          
-          # Copy built site to preview directory
-          cp -r ../_site/* preview/${{ steps.branch-info.outputs.branch-name }}/
-          
-          # Add and commit
-          git add .
-          git commit -m "Deploy preview for ${{ steps.branch-info.outputs.branch-name }}" || echo "No changes to commit"
-          
-          # Push to gh-pages
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git gh-pages
+      - name: Deploy to GitHub Pages preview
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          destination_dir: preview/${{ steps.branch-info.outputs.branch-name }}
+          keep_files: true
           
       - name: Comment on PR with preview URL
         if: github.event_name == 'pull_request'
@@ -106,25 +83,23 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
-      - name: Cleanup preview on PR close
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          
+      - name: Remove preview directory
         run: |
-          # Configure git
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Clone the repository
-          git clone https://github.com/${{ github.repository }}.git temp-repo
-          cd temp-repo
-          
-          # Switch to gh-pages branch
-          if git ls-remote --exit-code --heads origin gh-pages; then
-            git checkout gh-pages
-            
-            # Remove the preview directory
-            if [ -d "preview/pr-${{ github.event.number }}" ]; then
-              rm -rf preview/pr-${{ github.event.number }}
-              git add .
-              git commit -m "Cleanup preview for closed PR #${{ github.event.number }}" || echo "No changes to commit"
-              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git gh-pages
-            fi
+          if [ -d "preview/pr-${{ github.event.number }}" ]; then
+            rm -rf preview/pr-${{ github.event.number }}
+            echo "Removed preview directory for PR #${{ github.event.number }}"
+          else
+            echo "Preview directory for PR #${{ github.event.number }} not found"
           fi
+          
+      - name: Deploy cleanup
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          keep_files: true
