@@ -1,49 +1,83 @@
-name: Build Preview for Testing
+name: Jekyll Preview Deploy
 
 on:
-  pull_request:
-    branches:
-      - main
-    types: [opened, synchronize, reopened, closed]
   push:
     branches:
-      - preview/*
-      - staging
-
-# Recommended concurrency group for preview-pages action
-concurrency:
-  group: preview-pages-${{ github.ref }}
-  cancel-in-progress: true
+      - main
+  pull_request:
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  build-preview:
+  deploy:
     runs-on: ubuntu-latest
-    if: github.event.action != 'closed'
+    env:
+      PR_PATH: pull/${{github.event.number}}
     steps:
+      - name: Comment on PR
+        uses: hasura/comment-progress@v2.2.0
+        if: github.ref != 'refs/heads/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: deploy-preview
+          message: "Starting deployment of preview ⏳..."
+
+      - name: Set domain
+        run: echo "DOMAIN=devnomadic.com" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.1'
           bundler-cache: true
-          
-      - name: Build with Jekyll for preview
-        run: |
-          bundle exec jekyll build --destination ./_site
+
+      - name: Set production base URL
+        run: echo "BASE_URL=https://${{ env.DOMAIN }}/" >> $GITHUB_ENV
+
+      - name: Build website
+        run: bundle exec jekyll build --destination ./_site --baseurl ""
         env:
           JEKYLL_ENV: production
-          
-      - name: Deploy Preview Pages
-        uses: rajyan/preview-pages@v1
+
+      - name: Deploy if this is the main branch
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
         with:
-          source-dir: ./_site
-          configured-domain: devnomadic.com
-          target-dir: preview
-          pr-comment: sticky
-          branch-comment: each
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          cname: ${{ env.DOMAIN }}
+
+      - name: Set base URL for preview if PR
+        if: github.ref != 'refs/heads/main'
+        run: echo "BASE_URL=https://${{ env.DOMAIN }}/${{ env.PR_PATH}}/" >> $GITHUB_ENV
+
+      - name: Build PR preview website
+        if: github.ref != 'refs/heads/main'
+        run: bundle exec jekyll build --destination ./_site --baseurl "/${{ env.PR_PATH }}"
+        env:
+          JEKYLL_ENV: staging
+
+      - name: Deploy to PR preview
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref != 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          destination_dir: ${{ env.PR_PATH }}
+
+      - name: Update comment
+        uses: hasura/comment-progress@v2.2.0
+        if: github.ref != 'refs/heads/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: deploy-preview
+          message: "A preview of ${{ github.event.after }} is uploaded and can be seen here:\n\n ✨ ${{ env.BASE_URL }} ✨\n\nChanges may take a few minutes to propagate."
