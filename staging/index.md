@@ -16,8 +16,8 @@ This is where posts are staged for preview before going live.
 ## Staged Posts
 
 <div class="post-links">
-  {% assign staging_posts = site.staging | sort: 'date' | reverse %}
-  {% if staging_posts.size > 0 %}
+  {% if site.staging and site.staging.size > 0 %}
+    {% assign staging_posts = site.staging | sort: 'date' | reverse %}
     {% for post in staging_posts %}
       <div class="post-link-wrapper">
         <a href="{{ post.url | relative_url }}" class="post-link">{{ post.title }}</a>
