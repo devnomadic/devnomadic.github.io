@@ -28,7 +28,11 @@ jobs:
           bundler-cache: true
 
       - name: Build Jekyll site
-        run: bundle exec jekyll build
+        if: github.event.action != 'closed'
+        run: |
+          # Remove CNAME file for previews to avoid routing conflicts
+          rm -f CNAME
+          bundle exec jekyll build
         env:
           JEKYLL_ENV: production
 
