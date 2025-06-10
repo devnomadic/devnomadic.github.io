@@ -27,12 +27,32 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
 
+      - name: Setup staging for preview
+        if: github.event.action != 'closed'
+        run: |
+          # Copy any new or modified post files to staging directory
+          # This allows preview of posts before they go live
+          mkdir -p staging
+          
+          # Find modified .md files in _posts directory from this PR
+          git diff --name-only origin/main...HEAD | grep "^_posts/.*\.md$" | while read file; do
+            if [ -f "$file" ]; then
+              echo "Staging post: $file"
+              cp "$file" "staging/$(basename "$file")"
+            fi
+          done
+          
+          # List staged files for debugging
+          echo "Staged posts:"
+          ls -la staging/ || echo "No posts staged"
+
       - name: Build Jekyll site
         if: github.event.action != 'closed'
         run: |
           # Remove CNAME file for previews to avoid routing conflicts
           rm -f CNAME
-          bundle exec jekyll build
+          # Build with preview config that includes staging posts
+          bundle exec jekyll build --config _config.yml,_config_preview.yml
         env:
           JEKYLL_ENV: production
 
