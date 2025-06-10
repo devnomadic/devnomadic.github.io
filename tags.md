@@ -39,17 +39,21 @@ permalink: /tags/
 {% endfor %}
 
 <style>
+/* Tag cloud styling - matches home page exactly with important overrides */
 .tag-cloud {
-  margin: 20px 0;
-  line-height: 2;
+  margin: 20px 0 !important;
+  line-height: 2 !important;
 }
 
 .tag-item {
-  display: inline-block;
-  margin: 5px;
+  display: inline-block !important;
+  margin: 5px !important;
 }
 
-.tag-cloud .tag {
+/* Use exact same styling as home page post-tags - override theme completely */
+.tag-cloud .tag,
+.tag-cloud a,
+.tag-cloud a.tag {
   display: inline-block !important;
   background-color: #f1f3f4 !important;
   color: #5f6368 !important;
@@ -61,20 +65,20 @@ permalink: /tags/
   border: none !important;
 }
 
-.tag-cloud .tag:hover {
+.tag-cloud .tag:hover,
+.tag-cloud a:hover,
+.tag-cloud a.tag:hover {
   background-color: #e8eaed !important;
   color: #202124 !important;
   text-decoration: none !important;
 }
 
-/* Override theme's default tag styling */
+/* Remove any theme icons or decorations */
+.tag-cloud .tag:before,
+.tag-cloud a:before,
 .tag-cloud a.tag:before {
   display: none !important;
-}
-
-.tag-cloud a.tag {
-  background-color: #f1f3f4 !important;
-  color: #5f6368 !important;
+  content: none !important;
 }
 
 .tag-posts {
@@ -88,11 +92,11 @@ permalink: /tags/
   padding: 0.75rem;
   background-color: #f8f9fa;
   border-radius: 0.25rem;
-  border-left: 3px solid #de5684;
+  border-left: 3px solid #c94570;
 }
 
 .tag-posts li a {
-  color: #de5684;
+  color: #c94570;
   text-decoration: none;
   font-weight: 500;
 }

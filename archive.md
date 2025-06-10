@@ -31,19 +31,20 @@ permalink: /archive/
   padding: 1rem;
   background: linear-gradient(135deg, #fef7f9 0%, #fdf2f5 100%);
   border-radius: 0.5rem;
-  border-left: 4px solid #de5684;
-  box-shadow: 0 2px 4px rgba(222, 86, 132, 0.1);
+  border-left: 4px solid #c94570;
+  box-shadow: 0 2px 4px rgba(201, 69, 112, 0.1);
   transition: all 0.3s ease;
 }
 
 .archive-item:hover {
   background: linear-gradient(135deg, #fdf2f5 0%, #fcecf1 100%);
-  box-shadow: 0 4px 8px rgba(222, 86, 132, 0.15);
+  box-shadow: 0 4px 8px rgba(201, 69, 112, 0.15);
   transform: translateY(-1px);
+  border-left: 4px solid #b83d64;
 }
 
 .archive-link {
-  color: #de5684;
+  color: #c94570;
   text-decoration: none;
   font-weight: 600;
   font-size: 1.1rem;
@@ -51,7 +52,7 @@ permalink: /archive/
 }
 
 .archive-link:hover {
-  color: #c94570;
+  color: #b83d64;
   text-decoration: underline;
 }
 
@@ -64,8 +65,8 @@ permalink: /archive/
 }
 
 h2 {
-  color: #de5684;
-  border-bottom: 3px solid #de5684;
+  color: #c94570;
+  border-bottom: 3px solid #c94570;
   padding-bottom: 0.75rem;
   margin: 2.5rem 0 1.5rem 0;
   font-weight: 700;
@@ -79,13 +80,13 @@ h2::after {
   left: 0;
   width: 50px;
   height: 3px;
-  background: linear-gradient(90deg, #de5684 0%, #f8b2cc 100%);
+  background: linear-gradient(90deg, #c94570 0%, #f8b2cc 100%);
 }
 
 /* Add subtle pink accent to the page */
 #markdown-toc {
   background: linear-gradient(135deg, #fef7f9 0%, #fdf2f5 100%);
-  border: 1px solid #de5684;
+  border: 1px solid #c94570;
   border-radius: 0.5rem;
   padding: 1rem;
 }
