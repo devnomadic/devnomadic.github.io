@@ -57,7 +57,19 @@ jobs:
           
           # Build Jekyll site with maximum verbosity
           echo "=== Running Jekyll Build ==="
-          bundle exec jekyll build --config _config.yml,_config_preview.yml --verbose --trace
+          echo "First, try building with main config only..."
+          bundle exec jekyll build --config _config.yml --verbose --trace
+          
+          echo "Main config build result:"
+          if [ -d "_site" ] && [ -n "$(ls -A _site 2>/dev/null)" ]; then
+            echo "✅ Main config build SUCCESS - _site has content"
+            echo "Now trying with preview config..."
+            rm -rf _site
+            bundle exec jekyll build --config _config.yml,_config_preview.yml --verbose --trace
+          else
+            echo "❌ Main config build FAILED or empty - stopping here"
+            exit 1
+          fi
           
           # Check build results in detail
           echo "=== Build Results ==="
