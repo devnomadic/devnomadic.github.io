@@ -33,7 +33,11 @@ jobs:
           ls -1 _posts/*.md 2>/dev/null | head -5 || echo "  (none)"
 
       - name: Build with Jekyll
-        run: bundle exec jekyll build
+        run: |
+          # Remove CNAME to avoid conflicts with preview
+          rm -f CNAME
+          # Build with preview config that includes staging
+          bundle exec jekyll build --config _config.yml,_config_preview.yml
         env:
           JEKYLL_ENV: production
 

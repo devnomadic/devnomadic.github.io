@@ -1,20 +1,20 @@
 # Preview-specific configuration
 # This extends the main _config.yml for preview builds
 
-# Collections for staging posts - COMMENTED OUT FOR TESTING
-# collections:
-#   staging:
-#     output: true
-#     permalink: /:collection/:name/
+# Collections for staging posts
+collections:
+  staging:
+    output: true
+    permalink: /:collection/:name/
 
-# Make staging posts appear in site.posts - COMMENTED OUT FOR TESTING  
-# defaults:
-#   - scope:
-#       path: "staging"
-#       type: "staging"
-#     values:
-#       layout: "post"
+# Make staging posts appear in site.posts
+defaults:
+  - scope:
+      path: "staging"
+      type: "staging"
+    values:
+      layout: "post"
 
-# Include staging directory in the build - COMMENTED OUT FOR TESTING
-# include:
-#   - staging
+# Include staging directory in the build
+include:
+  - staging
