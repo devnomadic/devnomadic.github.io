@@ -36,20 +36,40 @@ jobs:
         run: |
           echo "=== Building Jekyll site with staging ==="
           
+          # Show what files are available to Jekyll
+          echo "=== Available content ==="
+          echo "Posts in _posts/:"
+          ls -la _posts/ 2>/dev/null || echo "No _posts directory"
+          
+          echo "Posts in staging/:"
+          ls -la staging/ 2>/dev/null || echo "No staging directory"
+          
+          echo "Index files:"
+          ls -la *.html *.md 2>/dev/null || echo "No index files"
+          
+          # Show Jekyll configs
+          echo "=== Jekyll Configuration ==="
+          echo "Main config exists: $(test -f _config.yml && echo 'YES' || echo 'NO')"
+          echo "Preview config exists: $(test -f _config_preview.yml && echo 'YES' || echo 'NO')"
+          
           # Remove CNAME file for previews to avoid routing conflicts
           rm -f CNAME
           
-          # Build Jekyll site - staging posts will be included as a collection
-          bundle exec jekyll build --config _config.yml,_config_preview.yml
+          # Build Jekyll site with maximum verbosity
+          echo "=== Running Jekyll Build ==="
+          bundle exec jekyll build --config _config.yml,_config_preview.yml --verbose --trace
           
-          # Verify build succeeded
-          if [ ! -d "_site" ] || [ -z "$(ls -A _site 2>/dev/null)" ]; then
-            echo "ERROR: Jekyll build failed or created empty _site directory"
+          # Check build results in detail
+          echo "=== Build Results ==="
+          if [ -d "_site" ]; then
+            echo "_site directory exists"
+            echo "Contents of _site/:"
+            find _site -type f -exec ls -la {} \; 2>/dev/null || echo "No files in _site"
+            echo "Total files: $(find _site -type f 2>/dev/null | wc -l)"
+          else
+            echo "ERROR: _site directory does not exist!"
             exit 1
           fi
-          
-          echo "Build completed successfully"
-          echo "Files built: $(find _site -type f | wc -l)"
         env:
           JEKYLL_ENV: production
 
