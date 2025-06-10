@@ -32,100 +32,24 @@ jobs:
           echo "Published posts:"
           ls -1 _posts/*.md 2>/dev/null | head -5 || echo "  (none)"
 
-      - name: Build Jekyll site with staging
-        run: |
-          echo "=== Building Jekyll site with staging ==="
-          
-          # Show what files are available to Jekyll
-          echo "=== Available content ==="
-          echo "Posts in _posts/:"
-          ls -la _posts/ 2>/dev/null || echo "No _posts directory"
-          
-          echo "Posts in staging/:"
-          ls -la staging/ 2>/dev/null || echo "No staging directory"
-          
-          echo "Index files:"
-          ls -la *.html *.md 2>/dev/null || echo "No index files"
-          
-          # Show Jekyll configs
-          echo "=== Jekyll Configuration ==="
-          echo "Main config exists: $(test -f _config.yml && echo 'YES' || echo 'NO')"
-          echo "Preview config exists: $(test -f _config_preview.yml && echo 'YES' || echo 'NO')"
-          
-          # Remove CNAME file for previews to avoid routing conflicts
-          rm -f CNAME
-          
-          # Build Jekyll site with maximum verbosity
-          echo "=== Running Jekyll Build ==="
-          echo "First, try building with main config only..."
-          
-          set -e  # Exit on any error
-          
-          bundle exec jekyll build --config _config.yml --verbose 2>&1 | tee build-main.log
-          
-          echo "Main config build result:"
-          if [ -d "_site" ] && [ -n "$(ls -A _site 2>/dev/null)" ]; then
-            echo "✅ Main config build SUCCESS - _site has content"
-            echo "Files created: $(find _site -type f | wc -l)"
-            echo "Sample files:"
-            find _site -name "*.html" | head -5
-            
-            echo "Now trying with preview config..."
-            rm -rf _site
-            bundle exec jekyll build --config _config.yml,_config_preview.yml --verbose 2>&1 | tee build-preview.log
-            
-            echo "Preview config build result:"
-            if [ -d "_site" ] && [ -n "$(ls -A _site 2>/dev/null)" ]; then
-              echo "✅ Preview config build SUCCESS"
-              echo "Files created: $(find _site -type f | wc -l)"
-            else
-              echo "❌ Preview config build FAILED or empty"
-              echo "Build log:"
-              cat build-preview.log
-              exit 1
-            fi
-          else
-            echo "❌ Main config build FAILED or empty"
-            echo "Build log:"
-            cat build-main.log
-            exit 1
-          fi
-          
-          # Check build results in detail
-          echo "=== Build Results ==="
-          if [ -d "_site" ]; then
-            echo "_site directory exists"
-            echo "Contents of _site/:"
-            find _site -type f -exec ls -la {} \; 2>/dev/null || echo "No files in _site"
-            echo "Total files: $(find _site -type f 2>/dev/null | wc -l)"
-          else
-            echo "ERROR: _site directory does not exist!"
-            exit 1
-          fi
+      - name: Build with Jekyll
+        run: bundle exec jekyll build
         env:
           JEKYLL_ENV: production
 
-      - name: Deploy staging site
+      - name: Deploy to gh-pages
         run: |
-          echo "=== Deploying staging site ==="
-          
-          # Switch to gh-pages branch
+          # Switch to gh-pages branch  
           git fetch origin gh-pages:gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
           
-          # Clear all content and deploy full site to root
+          # Clear and copy site
           rm -rf * 2>/dev/null || true
-          rm -rf .*/ 2>/dev/null || true
+          cp -r _site/* ./ 2>/dev/null || true
           
-          # Copy built site to root of gh-pages
-          cp -r _site/* ./
-          
-          # Commit and push the staging site
+          # Commit and push
           git add -A
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git commit -m "Deploy staging preview from PR #${{ github.event.number }}" || exit 0
+          git commit -m "Deploy preview from PR #${{ github.event.number }}" || exit 0
           git push origin gh-pages
-          
-          echo "=== Staging deployment complete ==="
-          echo "Preview URL: https://devnomadic.github.io/"
