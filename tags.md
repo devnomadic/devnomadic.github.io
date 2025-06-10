@@ -11,11 +11,9 @@ permalink: /tags/
 {% for tag in tags %}
   {% assign tagname = tag[0] %}
   {% assign posts = tag[1] %}
-  <span class="tag-item">
-    <a href="#{{ tagname | slugify }}" class="tag" data-count="{{ posts.size }}">
-      {{ tagname }} ({{ posts.size }})
-    </a>
-  </span>
+  <a href="#{{ tagname | slugify }}" class="tag" data-count="{{ posts.size }}">
+    {{ tagname }} ({{ posts.size }})
+  </a>
 {% endfor %}
 </div>
 
@@ -39,21 +37,14 @@ permalink: /tags/
 {% endfor %}
 
 <style>
-/* Tag cloud styling - matches home page exactly with important overrides */
+/* Tag cloud styling - matches home page exactly */
 .tag-cloud {
   margin: 20px 0 !important;
   line-height: 2 !important;
 }
 
-.tag-item {
-  display: inline-block !important;
-  margin: 5px !important;
-}
-
-/* Use exact same styling as home page post-tags - override theme completely */
-.tag-cloud .tag,
-.tag-cloud a,
-.tag-cloud a.tag {
+/* Match home page post-tags styling exactly */
+.tag-cloud .tag {
   display: inline-block !important;
   background-color: #f1f3f4 !important;
   color: #5f6368 !important;
@@ -62,24 +53,15 @@ permalink: /tags/
   border-radius: 0.25rem !important;
   font-size: 0.8rem !important;
   text-decoration: none !important;
-  border: none !important;
 }
 
-.tag-cloud .tag:hover,
-.tag-cloud a:hover,
-.tag-cloud a.tag:hover {
+.tag-cloud .tag:hover {
   background-color: #e8eaed !important;
   color: #202124 !important;
   text-decoration: none !important;
 }
 
-/* Remove any theme icons or decorations */
-.tag-cloud .tag:before,
-.tag-cloud a:before,
-.tag-cloud a.tag:before {
-  display: none !important;
-  content: none !important;
-}
+
 
 .tag-posts {
   list-style: none;
