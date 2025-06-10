@@ -12,12 +12,26 @@
           {% endfor %}
       </span>
     </div>
-    <!-- DEBUG: Navigation should appear here -->
-    <nav class="site-nav" style="display: block !important; background: red; padding: 10px;">
-      <a href="/about/" style="color: white; margin-right: 20px;">About</a>
-      <a href="/archive/" style="color: white; margin-right: 20px;">Archive</a>
-      <a href="/tags/" style="color: white; margin-right: 20px;">Tags</a>
+<div class="site-header">
+  <div class="wrapper">
+    <div class="header-top">
+      <a class="site-title" rel="author" href="{{ "/" | relative_url }}">{{ site.title | escape }}<b class="command_prompt"></b><b class="blinking_cursor">_</b></a>
+      <span class="social_links">
+          {% for link in site.dash.social_links %}
+          {% if link.fa == true %}
+          <a class="color-{{ link.color }}-hover" href="{{ link.url }}"{% if link.rel %} rel="{{ link.rel }}"{% endif %}><i class="fa fa-{{ link.icon }}"></i></a>
+          {% else %}
+          <a class="color-{{ link.color }}-hover" href="{{ link.url }}"{% if link.rel %} rel="{{ link.rel }}"{% endif %}><i class="fab fa-{{ link.icon }}"></i></a>
+          {% endif %}
+          {% endfor %}
+      </span>
+    </div>
+    <nav class="site-nav" style="display: block; border-top: 1px solid rgba(255, 167, 196, 0.3); padding-top: 0.75em; margin-top: 0.5em; width: 100%;">
+      <a href="/about/" style="display: inline-block; margin-right: 2em; color: #ffa7c4; text-decoration: none; font-size: 1em; font-weight: 500;">About</a>
+      <a href="/archive/" style="display: inline-block; margin-right: 2em; color: #ffa7c4; text-decoration: none; font-size: 1em; font-weight: 500;">Archive</a>
+      <a href="/tags/" style="display: inline-block; margin-right: 2em; color: #ffa7c4; text-decoration: none; font-size: 1em; font-weight: 500;">Tags</a>
     </nav>
-    <!-- DEBUG: End navigation -->
+  </div>
+</div>
   </div>
 </div>
