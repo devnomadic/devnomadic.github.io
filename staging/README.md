@@ -10,6 +10,9 @@ This directory contains markdown post files that are being staged for preview be
 1. During preview builds, new/modified post `.md` files are automatically copied here
 2. Jekyll builds the full site including staged posts
 3. Preview site is deployed to GitHub Pages root (not nested)
+
+## Testing:
+Updated to trigger workflow with improved error handling and verbose logging.
 2. Jekyll builds the site with both `_posts/` and `staging/` content
 3. After review and approval, posts are moved from `staging/` to `_posts/`
 4. Staging directory is cleaned up after merge
