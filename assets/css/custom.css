@@ -1,47 +1,93 @@
 /* Custom styles for devnomadic */
 
+/* Override theme's green tag styling completely */
+.tag, .tag-cloud > a {
+  color: #5f6368 !important;
+  background-color: #f1f3f4 !important;
+  padding: 0.2rem 0.5rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.8rem !important;
+  margin: 0.1rem 0.2rem 0.1rem 0 !important;
+  display: inline-block !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.tag:hover, .tag-cloud > a:hover {
+  background-color: #e8eaed !important;
+  color: #202124 !important;
+  text-decoration: none !important;
+}
+
+/* Remove Font Awesome icon from tags */
+.tag:before, .tag-cloud > a:before {
+  display: none !important;
+  content: none !important;
+}
+
 /* Post tags styling */
 .post-tags {
   margin: 0.5rem 0;
 }
 
 .post-tags .tag {
-  display: inline-block;
-  background-color: #f1f3f4;
-  color: #5f6368;
-  padding: 0.2rem 0.5rem;
-  margin: 0.1rem 0.2rem 0.1rem 0;
-  border-radius: 0.25rem;
-  font-size: 0.8rem;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
+  display: inline-block !important;
+  background-color: #f1f3f4 !important;
+  color: #5f6368 !important;
+  padding: 0.2rem 0.5rem !important;
+  margin: 0.1rem 0.2rem 0.1rem 0 !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.8rem !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease !important;
 }
 
 .post-tags .tag:hover {
-  background-color: #e8eaed;
-  color: #202124;
+  background-color: #e8eaed !important;
+  color: #202124 !important;
 }
 
-/* Tag cloud styling */
-.tag-cloud .tag-item {
-  display: inline-block;
-  margin: 0.2rem 0.5rem 0.2rem 0;
+.post-tags .tag:before {
+  display: none !important;
+  content: none !important;
 }
 
-.tag-cloud .tag-link {
+/* Tag posts styling for tags page */
+.tag-posts {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.tag-posts li {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
   background-color: #f8f9fa;
-  color: #5f6368;
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.3rem;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+  border-radius: 0.25rem;
+  border-left: 3px solid #c94570;
 }
 
-.tag-cloud .tag-link:hover {
-  background-color: #e8eaed;
-  color: #202124;
-  transform: translateY(-1px);
+.tag-posts li a {
+  color: #c94570;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.tag-posts li a:hover {
+  text-decoration: underline;
+}
+
+.post-date {
+  color: #5f6368;
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .post-date {
+    font-size: 0.8em;
+  }
 }
 
 /* Post link wrapper styling */
