@@ -50,31 +50,45 @@ permalink: /tags/
 }
 
 .tag-cloud .tag {
-  display: inline-block;
-  background-color: #f1f3f4;
-  color: #5f6368;
-  padding: 0.2rem 0.5rem;
-  margin: 0.1rem 0.2rem 0.1rem 0;
-  border-radius: 0.25rem;
-  font-size: 0.8rem;
-  text-decoration: none;
+  display: inline-block !important;
+  background-color: #f1f3f4 !important;
+  color: #5f6368 !important;
+  padding: 0.2rem 0.5rem !important;
+  margin: 0.1rem 0.2rem 0.1rem 0 !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.8rem !important;
+  text-decoration: none !important;
+  border: none !important;
 }
 
 .tag-cloud .tag:hover {
-  background-color: #e8eaed;
-  color: #202124;
+  background-color: #e8eaed !important;
+  color: #202124 !important;
+  text-decoration: none !important;
+}
+
+/* Override theme's default tag styling */
+.tag-cloud a.tag:before {
+  display: none !important;
+}
+
+.tag-cloud a.tag {
+  background-color: #f1f3f4 !important;
+  color: #5f6368 !important;
 }
 
 .tag-posts {
   list-style: none;
   padding: 0;
+  margin-bottom: 30px;
 }
 
 .tag-posts li {
   margin: 0.5rem 0;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background-color: #f8f9fa;
   border-radius: 0.25rem;
+  border-left: 3px solid #de5684;
 }
 
 .tag-posts li a {
@@ -90,51 +104,12 @@ permalink: /tags/
 .post-date {
   color: #5f6368;
   font-size: 0.9rem;
-  margin-left: 1rem;
-}
-</style>
-
-.tag-link {
-  background: #f0f0f0;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.9em;
-  color: #333;
-  border: 1px solid #ddd;
-  transition: all 0.2s ease;
-}
-
-.tag-link:hover {
-  background: #e0e0e0;
-  border-color: #ccc;
-}
-
-.tag-posts {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 30px;
-}
-
-.tag-posts li {
-  padding: 5px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.tag-posts li:last-child {
-  border-bottom: none;
-}
-
-.post-date {
-  float: right;
-  color: #666;
-  font-size: 0.9em;
+  display: block;
+  margin-top: 0.25rem;
 }
 
 @media (max-width: 600px) {
   .post-date {
-    float: none;
-    display: block;
     font-size: 0.8em;
   }
 }
