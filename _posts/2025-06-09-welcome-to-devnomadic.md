@@ -46,5 +46,3 @@ I'm excited to share this journey with you. Whether you're a fellow developer cu
 Let's build something amazing together, from anywhere in the world! 🚀
 
 ---
-
-*Currently writing from: [Your Current Location]*

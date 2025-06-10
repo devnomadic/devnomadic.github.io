@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Disallow crawling of preview/staging content
+Disallow: /preview/
+Disallow: /staging/
+
+# Allow crawling of main site content
+Allow: /assets/
+Allow: /tag/
+Allow: /blog/
+
+# Sitemap location
+Sitemap: https://devnomadic.github.io/sitemap.xml
