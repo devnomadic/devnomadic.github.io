@@ -8,6 +8,20 @@ tags: introduction devnomad remote-work digital-nomad software-engineering trave
 
 # Welcome to my digital nomad journey!
 
+## 📝 TL;DR
+
+🚀 **Starting devnomadic** - a blog documenting my journey as a software engineer embracing the digital nomad lifestyle.
+
+**What you'll find here:**
+- 🔧 **Technical tutorials** & best practices
+- 🌍 **Remote work insights** from distributed teams  
+- ✈️ **Travel stories** from a developer's perspective
+- 📱 **Tool recommendations** for nomadic developers
+
+Join me as I explore the intersection of **code, travel, and remote work**!
+
+---
+
 Hello and welcome to devnomadic! This blog represents the beginning of documenting my journey as a software engineer embracing the digital nomad lifestyle.
 
 ## Why devnomadic?

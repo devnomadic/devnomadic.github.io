@@ -28,6 +28,14 @@ dash:
   show_author: true
   avatar_source: "local"
   avatar_path: "/assets/avatar.gif"
+  show_nav: true
+  nav_links:
+    - url: /about
+      title: About
+    - url: /archive
+      title: Archive
+    - url: /tags
+      title: Tags
   social_links:
     - url: https://github.com/devnomadic
       icon: github

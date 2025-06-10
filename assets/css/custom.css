@@ -66,3 +66,47 @@
   color: #202124;
   line-height: 1.5;
 }
+
+/* Remove text justification on mobile devices */
+@media (max-width: 768px) {
+  body, p, div, article, section {
+    text-align: left !important;
+  }
+  
+  /* Specifically target post content */
+  .post-content, 
+  .post-body, 
+  .content,
+  .post-excerpt {
+    text-align: left !important;
+  }
+}
+
+/* TLDR section styling */
+.post-content h2:has(+ p):where(:contains("TL;DR"), :contains("TLDR")),
+.post-content h2 + p:has-text("📝 TL;DR") {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+  border-left: 4px solid #4285f4;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Alternative approach - target by content */
+.post-content > h2 + p:first-of-type,
+.post-content h2 + p {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+  border-left: 4px solid #4285f4;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* TLDR heading style */
+.post-content h2:contains("TL;DR") {
+  color: #4285f4;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
