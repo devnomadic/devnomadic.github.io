@@ -1,15 +1,8 @@
 name: Deploy Staging Preview
 
 on:
-  push:
-    branches: [post/updates]  # Build staging when changes pushed to updates branch
-    paths: 
-      - '_posts/**'
-      - 'staging/**'
-      - '_config*.yml'
-      - '_layouts/**'
-      - '_includes/**'
-      - 'assets/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
@@ -30,40 +23,10 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
 
-      - name: Setup staging posts
+      - name: Show staging content
         run: |
-          echo "=== Setting up staging posts ==="
-          
-          # Ensure staging directory exists
-          mkdir -p staging
-          
-          # Find new or modified .md files in _posts directory
-          echo "Checking for new/modified posts to stage..."
-          
-          # Get posts that are new or modified compared to main branch
-          if git rev-parse origin/main >/dev/null 2>&1; then
-            echo "Comparing with main branch..."
-            MODIFIED_POSTS=$(git diff --name-only origin/main...HEAD | grep "^_posts/.*\.md$" || true)
-          else
-            echo "Main branch not found, staging all posts..."
-            MODIFIED_POSTS=$(find _posts -name "*.md" 2>/dev/null || true)
-          fi
-          
-          if [ -n "$MODIFIED_POSTS" ]; then
-            echo "Posts to stage:"
-            echo "$MODIFIED_POSTS" | while read -r file; do
-              if [ -f "$file" ]; then
-                echo "  - Staging: $file"
-                cp "$file" "staging/$(basename "$file")"
-              fi
-            done
-          else
-            echo "No new/modified posts found to stage"
-          fi
-          
-          # Show current staging content
-          echo "=== Current staging content ==="
-          echo "Staged posts:"
+          echo "=== Staging content ==="
+          echo "Staging posts:"
           find staging/ -name "*.md" -not -name "README.md" -not -name "index.md" | sort || echo "  (none)"
           
           echo "Published posts:"
@@ -76,48 +39,23 @@ jobs:
           # Remove CNAME file for previews to avoid routing conflicts
           rm -f CNAME
           
-          # Show current directory structure before build
-          echo "Files before build:"
-          ls -la
-          
           # Build Jekyll site - staging posts will be included as a collection
-          echo "Running Jekyll build..."
-          bundle exec jekyll build --config _config.yml,_config_preview.yml --verbose
+          bundle exec jekyll build --config _config.yml,_config_preview.yml
           
-          # Check if build succeeded
-          if [ $? -eq 0 ]; then
-            echo "Jekyll build completed successfully"
-          else
-            echo "Jekyll build failed!"
+          # Verify build succeeded
+          if [ ! -d "_site" ] || [ -z "$(ls -A _site 2>/dev/null)" ]; then
+            echo "ERROR: Jekyll build failed or created empty _site directory"
             exit 1
           fi
           
-          # Show what was built
-          echo "Build completed. Checking _site directory:"
-          if [ -d "_site" ]; then
-            echo "_site directory exists"
-            echo "Site structure:"
-            find _site -name "*.html" | head -10
-            echo "Total files in _site:"
-            find _site -type f | wc -l
-          else
-            echo "ERROR: _site directory was not created!"
-            exit 1
-          fi
+          echo "Build completed successfully"
+          echo "Files built: $(find _site -type f | wc -l)"
         env:
           JEKYLL_ENV: production
 
       - name: Deploy staging site
         run: |
           echo "=== Deploying staging site ==="
-          
-          # Verify _site directory exists before proceeding
-          if [ ! -d "_site" ]; then
-            echo "ERROR: _site directory not found. Build must have failed."
-            exit 1
-          fi
-          
-          echo "_site directory found, proceeding with deployment..."
           
           # Switch to gh-pages branch
           git fetch origin gh-pages:gh-pages || git checkout --orphan gh-pages
@@ -130,11 +68,11 @@ jobs:
           # Copy built site to root of gh-pages
           cp -r _site/* ./
           
-          # Commit and push the full staging site
+          # Commit and push the staging site
           git add -A
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git commit -m "Deploy staging preview from ${{ github.ref_name }} (${{ github.sha }})" || exit 0
+          git commit -m "Deploy staging preview from PR #${{ github.event.number }}" || exit 0
           git push origin gh-pages
           
           echo "=== Staging deployment complete ==="
