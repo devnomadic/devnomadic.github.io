@@ -1,21 +1,24 @@
-name: Deploy PR Preview
+name: Deploy Staging Preview
 
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - closed
+  push:
+    branches: [post/updates]  # Build staging when changes pushed to updates branch
+    paths: 
+      - '_posts/**'
+      - 'staging/**'
+      - '_config*.yml'
+      - '_layouts/**'
+      - '_includes/**'
+      - 'assets/**'
+  workflow_dispatch:  # Allow manual trigger
 
 permissions:
   contents: write
-  pull-requests: write
 
-concurrency: preview-${{ github.ref }}
+concurrency: staging-preview
 
 jobs:
-  deploy-preview:
+  deploy-staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,38 +30,143 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
 
-      - name: Setup staging for preview
-        if: github.event.action != 'closed'
+      - name: Setup staging posts
         run: |
-          # Copy any new or modified post files to staging directory
-          # This allows preview of posts before they go live
+          echo "=== Setting up staging posts ==="
+          
+          # Ensure staging directory exists
           mkdir -p staging
           
-          # Find modified .md files in _posts directory from this PR
-          git diff --name-only origin/main...HEAD | grep "^_posts/.*\.md$" | while read file; do
-            if [ -f "$file" ]; then
-              echo "Staging post: $file"
-              cp "$file" "staging/$(basename "$file")"
-            fi
-          done
+          # Find new or modified .md files in _posts directory
+          echo "Checking for new/modified posts to stage..."
           
-          # List staged files for debugging
+          # Get posts that are new or modified compared to main branch
+          if git rev-parse origin/main >/dev/null 2>&1; then
+            echo "Comparing with main branch..."
+            MODIFIED_POSTS=$(git diff --name-only origin/main...HEAD | grep "^_posts/.*\.md$" || true)
+          else
+            echo "Main branch not found, staging all posts..."
+            MODIFIED_POSTS=$(find _posts -name "*.md" 2>/dev/null || true)
+          fi
+          
+          if [ -n "$MODIFIED_POSTS" ]; then
+            echo "Posts to stage:"
+            echo "$MODIFIED_POSTS" | while read -r file; do
+              if [ -f "$file" ]; then
+                echo "  - Staging: $file"
+                cp "$file" "staging/$(basename "$file")"
+              fi
+            done
+          else
+            echo "No new/modified posts found to stage"
+          fi
+          
+          # Show current staging content
+          echo "=== Current staging content ==="
           echo "Staged posts:"
-          ls -la staging/ || echo "No posts staged"
+          find staging/ -name "*.md" -not -name "README.md" -not -name "index.md" | sort || echo "  (none)"
+          
+          echo "Published posts:"
+          ls -1 _posts/*.md 2>/dev/null | head -5 || echo "  (none)"
 
-      - name: Build Jekyll site
-        if: github.event.action != 'closed'
+      - name: Build Jekyll site with staging
         run: |
+          echo "=== Building Jekyll site with staging ==="
+          
           # Remove CNAME file for previews to avoid routing conflicts
           rm -f CNAME
-          # Build with preview config that includes staging posts
+          
+          # Build Jekyll site - staging posts will be included as a collection
           bundle exec jekyll build --config _config.yml,_config_preview.yml
+          
+          echo "Build completed. Site structure:"
+          find _site -name "*.html" | head -10
         env:
           JEKYLL_ENV: production
 
-      - name: Deploy preview
-        uses: rossjrw/pr-preview-action@v1
-        with:
-          source-dir: ./_site
-          preview-branch: gh-pages
-          umbrella-dir: pr-preview
+      - name: Deploy to staging area
+        run: |
+          echo "=== Deploying to staging area ==="
+          
+          # Switch to gh-pages branch
+          git fetch origin gh-pages:gh-pages || git checkout --orphan gh-pages
+          git checkout gh-pages
+          
+          # Clear old staging content and copy new build
+          rm -rf staging/
+          mkdir -p staging/
+          
+          # Copy built site to staging directory
+          cp -r _site/* staging/
+          
+          # Create a clear staging landing page
+          cat > staging-info.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Staging Area - devnomadic</title>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <style>
+                  body { 
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+                      max-width: 800px; margin: 0 auto; padding: 20px; 
+                      line-height: 1.6; color: #333;
+                  }
+                  .badge { 
+                      background: #ff6b6b; color: white; 
+                      padding: 4px 12px; border-radius: 20px; 
+                      font-size: 0.85em; font-weight: 500;
+                      display: inline-block; margin-bottom: 20px;
+                  }
+                  .nav { margin: 20px 0; }
+                  .nav a { 
+                      color: #0066cc; text-decoration: none; 
+                      margin-right: 15px; font-weight: 500;
+                  }
+                  .nav a:hover { text-decoration: underline; }
+                  .section { 
+                      background: #f8f9fa; padding: 20px; 
+                      border-radius: 8px; margin: 20px 0; 
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="badge">🚧 STAGING</div>
+              
+              <h1>Staging Area</h1>
+              <p>This is the staging area for preview posts and content before they go live on the main site.</p>
+              
+              <div class="nav">
+                  <a href="/staging/">→ View Staged Content</a>
+                  <a href="/">← Back to Main Site</a>
+              </div>
+              
+              <div class="section">
+                  <h3>What's Here</h3>
+                  <p>• Staged posts that are ready for preview</p>
+                  <p>• Draft content being reviewed</p>
+                  <p>• Updated layouts and styling</p>
+              </div>
+              
+              <div class="section">
+                  <p><strong>Latest build:</strong> $(date -u)</p>
+                  <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
+                  <p><strong>Commit:</strong> ${{ github.sha }}</p>
+              </div>
+          </body>
+          </html>
+          EOF
+          
+          # Add staging info to root of staging area
+          mv staging-info.html staging/
+          
+          # Commit and push
+          git add staging/
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git commit -m "Deploy staging preview from ${{ github.ref_name }} (${{ github.sha }})" || exit 0
+          git push origin gh-pages
+          
+          echo "=== Staging deployment complete ==="
+          echo "Preview URL: https://devnomadic.github.io/staging/"
