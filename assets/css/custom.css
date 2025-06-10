@@ -1,55 +1,57 @@
 /* Custom styles for devnomadic */
 
-/* Override theme's green tag styling completely */
+/* Keep theme's original green tag styling */
 .tag, .tag-cloud > a {
-  color: #5f6368 !important;
-  background-color: #f1f3f4 !important;
-  padding: 0.2rem 0.5rem !important;
-  border-radius: 0.25rem !important;
-  font-size: 0.8rem !important;
-  margin: 0.1rem 0.2rem 0.1rem 0 !important;
+  color: #50BD6A !important;
+  background-color: rgb(242.0163636364, 245.5254545455, 248.6836363636) !important;
+  padding: 0.3em 0.6em !important;
+  border-radius: 0.3em !important;
   display: inline-block !important;
+  margin: 0.3em 0.3em 0.3em 0 !important;
   text-decoration: none !important;
-  transition: background-color 0.2s ease !important;
 }
 
 .tag:hover, .tag-cloud > a:hover {
-  background-color: #e8eaed !important;
-  color: #202124 !important;
+  background-color: white !important;
+  color: rgb(154.0663900415, 216.9336099585, 169.0622406639) !important;
   text-decoration: none !important;
 }
 
-/* Remove Font Awesome icon from tags */
+/* Keep Font Awesome icon for tags */
 .tag:before, .tag-cloud > a:before {
-  display: none !important;
-  content: none !important;
+  content: "\f02b" !important;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  margin-right: 0.5em !important;
+  display: inline !important;
 }
 
-/* Post tags styling */
+/* Post tags styling - also green */
 .post-tags {
   margin: 0.5rem 0;
 }
 
 .post-tags .tag {
+  color: #50BD6A !important;
+  background-color: rgb(242.0163636364, 245.5254545455, 248.6836363636) !important;
+  padding: 0.3em 0.6em !important;
+  border-radius: 0.3em !important;
   display: inline-block !important;
-  background-color: #f1f3f4 !important;
-  color: #5f6368 !important;
-  padding: 0.2rem 0.5rem !important;
-  margin: 0.1rem 0.2rem 0.1rem 0 !important;
-  border-radius: 0.25rem !important;
-  font-size: 0.8rem !important;
+  margin: 0.3em 0.3em 0.3em 0 !important;
   text-decoration: none !important;
-  transition: background-color 0.2s ease !important;
 }
 
 .post-tags .tag:hover {
-  background-color: #e8eaed !important;
-  color: #202124 !important;
+  background-color: white !important;
+  color: rgb(154.0663900415, 216.9336099585, 169.0622406639) !important;
 }
 
 .post-tags .tag:before {
-  display: none !important;
-  content: none !important;
+  content: "\f02b" !important;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  margin-right: 0.5em !important;
+  display: inline !important;
 }
 
 /* Tag posts styling for tags page */
