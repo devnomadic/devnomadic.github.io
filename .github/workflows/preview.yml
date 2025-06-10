@@ -84,89 +84,27 @@ jobs:
         env:
           JEKYLL_ENV: production
 
-      - name: Deploy to staging area
+      - name: Deploy staging site
         run: |
-          echo "=== Deploying to staging area ==="
+          echo "=== Deploying staging site ==="
           
           # Switch to gh-pages branch
           git fetch origin gh-pages:gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
           
-          # Clear old staging content and copy new build
-          rm -rf staging/
-          mkdir -p staging/
+          # Clear all content and deploy full site to root
+          rm -rf *
+          rm -rf .*/ 2>/dev/null || true
           
-          # Copy built site to staging directory
-          cp -r _site/* staging/
+          # Copy built site to root of gh-pages
+          cp -r _site/* ./
           
-          # Create a clear staging landing page
-          cat > staging-info.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-              <title>Staging Area - devnomadic</title>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1">
-              <style>
-                  body { 
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-                      max-width: 800px; margin: 0 auto; padding: 20px; 
-                      line-height: 1.6; color: #333;
-                  }
-                  .badge { 
-                      background: #ff6b6b; color: white; 
-                      padding: 4px 12px; border-radius: 20px; 
-                      font-size: 0.85em; font-weight: 500;
-                      display: inline-block; margin-bottom: 20px;
-                  }
-                  .nav { margin: 20px 0; }
-                  .nav a { 
-                      color: #0066cc; text-decoration: none; 
-                      margin-right: 15px; font-weight: 500;
-                  }
-                  .nav a:hover { text-decoration: underline; }
-                  .section { 
-                      background: #f8f9fa; padding: 20px; 
-                      border-radius: 8px; margin: 20px 0; 
-                  }
-              </style>
-          </head>
-          <body>
-              <div class="badge">🚧 STAGING</div>
-              
-              <h1>Staging Area</h1>
-              <p>This is the staging area for preview posts and content before they go live on the main site.</p>
-              
-              <div class="nav">
-                  <a href="/staging/">→ View Staged Content</a>
-                  <a href="/">← Back to Main Site</a>
-              </div>
-              
-              <div class="section">
-                  <h3>What's Here</h3>
-                  <p>• Staged posts that are ready for preview</p>
-                  <p>• Draft content being reviewed</p>
-                  <p>• Updated layouts and styling</p>
-              </div>
-              
-              <div class="section">
-                  <p><strong>Latest build:</strong> $(date -u)</p>
-                  <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
-                  <p><strong>Commit:</strong> ${{ github.sha }}</p>
-              </div>
-          </body>
-          </html>
-          EOF
-          
-          # Add staging info to root of staging area
-          mv staging-info.html staging/
-          
-          # Commit and push
-          git add staging/
+          # Commit and push the full staging site
+          git add -A
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git commit -m "Deploy staging preview from ${{ github.ref_name }} (${{ github.sha }})" || exit 0
           git push origin gh-pages
           
           echo "=== Staging deployment complete ==="
-          echo "Preview URL: https://devnomadic.github.io/staging/"
+          echo "Preview URL: https://devnomadic.github.io/"
