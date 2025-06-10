@@ -110,3 +110,44 @@
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
+
+/* Navigation styling */
+.site-nav {
+  display: inline-block;
+  margin-left: 2em;
+}
+
+.nav-link {
+  display: inline-block;
+  margin-right: 1.5em;
+  color: #ffa7c4;
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .site-nav {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.5em;
+  }
+  
+  .nav-link {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 0.3em;
+  }
+  
+  .social_links {
+    float: none !important;
+    display: block;
+    text-align: left;
+    margin-top: 0.5em;
+  }
+}
