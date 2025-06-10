@@ -12,12 +12,12 @@
           {% endfor %}
       </span>
     </div>
-    {% if site.dash.nav_links and site.dash.show_nav %}
-    <nav class="site-nav">
-      {% for link in site.dash.nav_links %}
-        <a href="{{ link.url | relative_url }}" class="nav-link">{{ link.title }}</a>
-      {% endfor %}
+    <!-- DEBUG: Navigation should appear here -->
+    <nav class="site-nav" style="display: block !important; background: red; padding: 10px;">
+      <a href="/about/" style="color: white; margin-right: 20px;">About</a>
+      <a href="/archive/" style="color: white; margin-right: 20px;">Archive</a>
+      <a href="/tags/" style="color: white; margin-right: 20px;">Tags</a>
     </nav>
-    {% endif %}
+    <!-- DEBUG: End navigation -->
   </div>
 </div>
