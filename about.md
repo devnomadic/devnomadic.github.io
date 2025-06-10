@@ -29,5 +29,3 @@ Feel free to connect with me:
 - **Email**: hello@devnomadic.com
 
 ---
-
-*Currently coding from: [Current Location]*
