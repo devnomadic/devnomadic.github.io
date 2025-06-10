@@ -76,11 +76,34 @@ jobs:
           # Remove CNAME file for previews to avoid routing conflicts
           rm -f CNAME
           
-          # Build Jekyll site - staging posts will be included as a collection
-          bundle exec jekyll build --config _config.yml,_config_preview.yml
+          # Show current directory structure before build
+          echo "Files before build:"
+          ls -la
           
-          echo "Build completed. Site structure:"
-          find _site -name "*.html" | head -10
+          # Build Jekyll site - staging posts will be included as a collection
+          echo "Running Jekyll build..."
+          bundle exec jekyll build --config _config.yml,_config_preview.yml --verbose
+          
+          # Check if build succeeded
+          if [ $? -eq 0 ]; then
+            echo "Jekyll build completed successfully"
+          else
+            echo "Jekyll build failed!"
+            exit 1
+          fi
+          
+          # Show what was built
+          echo "Build completed. Checking _site directory:"
+          if [ -d "_site" ]; then
+            echo "_site directory exists"
+            echo "Site structure:"
+            find _site -name "*.html" | head -10
+            echo "Total files in _site:"
+            find _site -type f | wc -l
+          else
+            echo "ERROR: _site directory was not created!"
+            exit 1
+          fi
         env:
           JEKYLL_ENV: production
 
@@ -88,12 +111,20 @@ jobs:
         run: |
           echo "=== Deploying staging site ==="
           
+          # Verify _site directory exists before proceeding
+          if [ ! -d "_site" ]; then
+            echo "ERROR: _site directory not found. Build must have failed."
+            exit 1
+          fi
+          
+          echo "_site directory found, proceeding with deployment..."
+          
           # Switch to gh-pages branch
           git fetch origin gh-pages:gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
           
           # Clear all content and deploy full site to root
-          rm -rf *
+          rm -rf * 2>/dev/null || true
           rm -rf .*/ 2>/dev/null || true
           
           # Copy built site to root of gh-pages
