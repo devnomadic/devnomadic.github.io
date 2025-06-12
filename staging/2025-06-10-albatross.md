@@ -3,12 +3,24 @@ layout: post
 title: Albatross
 description: "Albatross Cloud IP maifest & reputation search"
 date: 2025-06-10
-tags: BlazorWebAssembly CloudflareWorkers DevSecOps WebDevelopment CyberSecurity
+tags: [blazorWebAssembly, cloudflareWorkers, devSecOps, webDevelopment, cyberSecurity]
 ---
 
 # Building Albatross: A Secure IP Abuse Checker with Blazor WebAssembly and Cloudflare Workers
 
 *Published: June 9, 2025*
+
+## 📝 TL;DR
+
+Built **Albatross**, a secure IP abuse checker using Blazor WebAssembly + Cloudflare Workers. Key features:
+- 🔐 **Secure API proxy** with HMAC authentication (no exposed API keys)
+- ⚡ **Fast client-side app** with server-side API protection
+- 🛡️ **Real-time IP reputation checking** via AbuseIPDB
+- 🏗️ **Modern architecture** combining the best of client and edge computing
+
+**Tech Stack:** Blazor WASM, Cloudflare Workers, HMAC-SHA256, AbuseIPDB API
+
+---
 
 In an era where cybersecurity threats are constantly evolving, having reliable tools to check IP addresses for malicious activity has become essential. Today, I'm excited to share the journey of building **Albatross** - a secure, modern web application that leverages the AbuseIPDB API to provide real-time IP abuse checking through a sophisticated architecture combining Blazor WebAssembly and Cloudflare Workers.
 

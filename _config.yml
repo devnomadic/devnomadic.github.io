@@ -1,7 +1,7 @@
 theme: jekyll-dash
 title: devnomadic
 description: Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere.
-url: "https://devnomadic.github.io"
+url: "https://devnomadic.com"
 baseurl: ""
 
 # Jekyll pagination (required for home page)
@@ -28,6 +28,14 @@ dash:
   show_author: true
   avatar_source: "local"
   avatar_path: "/assets/avatar.gif"
+  show_nav: true
+  nav_links:
+    - url: /about/
+      title: About
+    - url: /archive/
+      title: Archive
+    - url: /tags/
+      title: Tags
   social_links:
     - url: https://github.com/devnomadic
       icon: github
