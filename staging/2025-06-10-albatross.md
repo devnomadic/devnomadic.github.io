@@ -3,7 +3,7 @@ layout: post
 title: Albatross
 description: "Albatross Cloud IP maifest & reputation search"
 date: 2025-06-10
-tags: BlazorWebAssembly CloudflareWorkers DevSecOps WebDevelopment CyberSecurity
+tags: [blazorWebAssembly, cloudflareWorkers, devSecOps, webDevelopment, cyberSecurity]
 ---
 
 # Building Albatross: A Secure IP Abuse Checker with Blazor WebAssembly and Cloudflare Workers

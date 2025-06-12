@@ -3,7 +3,7 @@ layout: post
 title: "Setting Up the Perfect Remote Development Environment"
 description: "Essential tools and configurations for productive remote coding"
 date: 2025-06-08
-tags: remote-work development tools productivity vscode docker
+tags: [remoteWork, development, tools, productivity, vsCode, docker]
 ---
 
 # Creating Your Remote Development Paradise
