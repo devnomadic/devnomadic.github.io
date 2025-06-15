@@ -1,12 +1,26 @@
 ---
 layout: post
-title: "Welcome to devnomadic"
+title: "devnomadic"
 description: "Starting my journey as a digital nomad developer"
 date: 2025-06-09
-tags: introduction devnomad remote-work digital-nomad software-engineering travel lifestyle blogging
+tags: [introduction, devNomad, remoteWork, digitalNomad, softwareEngineering, travel, lifestyle, blogging]
 ---
 
 # Welcome to my digital nomad journey!
+
+## 📝 TL;DR
+
+🚀 **Starting devnomadic** - a blog documenting my journey as a software engineer embracing the digital nomad lifestyle.
+
+**What you'll find here:**
+- 🔧 **Technical tutorials** & best practices
+- 🌍 **Remote work insights** from distributed teams  
+- ✈️ **Travel stories** from a developer's perspective
+- 📱 **Tool recommendations** for nomadic developers
+
+Join me as I explore the intersection of **code, travel, and remote work**!
+
+---
 
 Hello and welcome to devnomadic! This blog represents the beginning of documenting my journey as a software engineer embracing the digital nomad lifestyle.
 
@@ -44,5 +58,10 @@ On this blog, you'll find:
 I'm excited to share this journey with you. Whether you're a fellow developer curious about the nomad lifestyle, or someone already living the digital nomad dream, I hope you'll find value in the experiences and insights I'll be sharing.
 
 Let's build something amazing together, from anywhere in the world! 🚀
+
+## 📋 Changelog
+
+- **2025-06-09:** Initial publication
+- **2025-06-15:** Updated tag format and added changelog
 
 ---

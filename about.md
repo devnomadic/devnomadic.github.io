@@ -26,8 +26,6 @@ This blog is where I share:
 
 Feel free to connect with me:
 - **GitHub**: [github.com/devnomadic](https://github.com/devnomadic)
-- **Email**: hello@devnomadic.com
+- **Email**: drew@devnomadic.com
 
 ---
-
-*Currently coding from: [Current Location]*

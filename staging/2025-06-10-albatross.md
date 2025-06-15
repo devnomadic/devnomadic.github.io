@@ -3,12 +3,24 @@ layout: post
 title: Albatross
 description: "Albatross Cloud IP maifest & reputation search"
 date: 2025-06-10
-tags: BlazorWebAssembly CloudflareWorkers DevSecOps WebDevelopment CyberSecurity
+tags: [blazorWebAssembly, cloudflareWorkers, devSecOps, webDevelopment, cyberSecurity]
 ---
 
 # Building Albatross: A Secure IP Abuse Checker with Blazor WebAssembly and Cloudflare Workers
 
 *Published: June 9, 2025*
+
+## 📝 TL;DR
+
+Built **Albatross**, a secure IP abuse checker using Blazor WebAssembly + Cloudflare Workers. Key features:
+- 🔐 **Secure API proxy** with HMAC authentication (no exposed API keys)
+- ⚡ **Fast client-side app** with server-side API protection
+- 🛡️ **Real-time IP reputation checking** via AbuseIPDB
+- 🏗️ **Modern architecture** combining the best of client and edge computing
+
+**Tech Stack:** Blazor WASM, Cloudflare Workers, HMAC-SHA256, AbuseIPDB API, Cloudflare Radar API
+
+---
 
 In an era where cybersecurity threats are constantly evolving, having reliable tools to check IP addresses for malicious activity has become essential. Today, I'm excited to share the journey of building **Albatross** - a secure, modern web application that leverages the AbuseIPDB API to provide real-time IP abuse checking through a sophisticated architecture combining Blazor WebAssembly and Cloudflare Workers.
 
@@ -285,26 +297,27 @@ In today's cloud-first world, understanding which cloud provider owns a specific
 
 ### Architecture and Data Sources
 
-The system maintains up-to-date IP range manifests from three major cloud providers:
+The system maintains up-to-date IP range manifests from four major cloud providers:
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   AWS IP Ranges │    │ Azure IP Ranges │    │  GCP IP Ranges  │
-│                 │    │                 │    │                 │
-│ • 76,000+ IPs   │    │ • 135,000+ IPs  │    │ • 3,100+ IPs    │
-│ • Regional Data │    │ • Service Tags  │    │ • Scope Data    │
-│ • Service Info  │    │ • Platform Info │    │ • Global Ranges │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-          │                       │                       │
-          └───────────────────────┼───────────────────────┘
-                                  │
-                          ┌─────────────────┐
-                          │  Albatross      │
-                          │  Search Engine  │
-                          │                 │
-                          │ • CIDR Matching │
-                          │ • IPv4 & IPv6   │
-                          │ • Real-time     │
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   AWS IP Ranges │    │ Azure IP Ranges │    │  GCP IP Ranges  │    │  OCI IP Ranges  │
+│                 │    │                 │    │                 │    │                 │
+│ • 76,000+ IPs   │    │ • 135,000+ IPs  │    │ • 3,100+ IPs    │    │ • 2,800+ IPs    │
+│ • Regional Data │    │ • Service Tags  │    │ • Scope Data    │    │ • Regional Tags │
+│ • Service Info  │    │ • Platform Info │    │ • Global Ranges │    │ • Service Data  │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+          │                       │                       │                       │
+          └───────────────────────┼───────────────────────┼───────────────────────┘
+                                  │                       │
+                          ┌─────────────────┐             │
+                          │  Albatross      │             │
+                          │  Search Engine  │             │
+                          │                 │             │
+                          │ • CIDR Matching │             │
+                          │ • IPv4 & IPv6   │             │
+                          │ • Real-time     │             │
+                          │ • Parallel Exec │←────────────┘
                           └─────────────────┘
 ```
 
@@ -356,6 +369,31 @@ The system maintains up-to-date IP range manifests from three major cloud provid
   "scope": "africa-south1"
 }
 ```
+
+#### Oracle Cloud Infrastructure IP Ranges
+- **Source**: `https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json`
+- **Updates**: Regularly updated by Oracle
+- **Contains**: Regional data, service tags, CIDR blocks
+- **Format**: Regional structure with comprehensive metadata
+
+```json
+{
+  "region": "us-ashburn-1",
+  "cidr": "129.213.0.0/16",
+  "tags": ["OCI", "OracleServices", "us-ashburn-1"]
+}
+```
+
+### Enhanced Cloud Provider Coverage
+
+With the recent addition of **Oracle Cloud Infrastructure (OCI)** support, Albatross now provides comprehensive coverage of the four major cloud providers:
+
+- **Amazon Web Services (AWS)**: 76,000+ IP ranges
+- **Microsoft Azure**: 135,000+ IP ranges  
+- **Google Cloud Platform (GCP)**: 3,100+ IP ranges
+- **Oracle Cloud Infrastructure (OCI)**: 2,800+ IP ranges
+
+This expansion significantly improves the tool's ability to identify cloud-hosted infrastructure across the enterprise landscape.
 
 ### Smart Search Algorithm
 
@@ -479,6 +517,10 @@ curl -sSL "https://ip-ranges.amazonaws.com/ip-ranges.json" \
 curl -sSL "https://www.gstatic.com/ipranges/cloud.json" \
      -o ./wwwroot/ip-manifests/GCP.json
 
+# Fetch Oracle IP ranges
+curl -sSL "https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json" \
+     -o ./wwwroot/ip-manifests/Oracle.json
+
 # Fetch Azure IP ranges (dynamic URL discovery)
 curl -sSL "https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519" \
      > /tmp/azure_page.html
@@ -489,12 +531,12 @@ curl -sSL "$AZURE_URL" -o ./wwwroot/ip-manifests/Azure.json
 
 ### Performance Optimizations
 
-Despite searching through 200,000+ IP ranges, the system maintains excellent performance:
+Despite searching through 217,000+ IP ranges across four cloud providers, the system maintains excellent performance:
 
 1. **Client-Side Processing**: All searches run in the browser using WebAssembly
 2. **Efficient Algorithms**: Optimized CIDR matching with early termination
 3. **Cached Manifests**: Static JSON files served via CDN
-4. **Parallel Processing**: Simultaneous searches across all three providers
+4. **Parallel Processing**: Simultaneous searches across all four providers
 5. **Smart Indexing**: Future enhancement for sub-second responses
 
 ### Example Search Results
@@ -533,6 +575,65 @@ Several exciting improvements are planned:
 
 The Cloud IP Manifest Search feature demonstrates how modern web applications can provide enterprise-grade functionality while maintaining simplicity and performance. By leveraging official cloud provider data and efficient client-side processing, Albatross delivers accurate, real-time cloud infrastructure attribution that's invaluable for security professionals and network administrators.
 
+## Recent Enhancements (June 2025)
+
+Since the initial release, Albatross has received several significant improvements that enhance both functionality and user experience:
+
+### Oracle Cloud Infrastructure (OCI) Support
+
+The most substantial addition is comprehensive **Oracle Cloud Infrastructure** support, making Albatross the first tool to provide unified IP range detection across all four major cloud providers:
+
+- **Complete Coverage**: Official OCI IP ranges from Oracle's public API
+- **Regional Identification**: Detailed region and service tag information
+- **Automatic Updates**: Integrated into the automated manifest update system
+- **Enhanced Search**: Parallel searching across AWS, Azure, GCP, and OCI
+
+### Enhanced Data Structures
+
+The search functionality has been significantly improved with new **CloudMatch** objects:
+
+```csharp
+public class CloudMatch 
+{
+    public string ServiceName { get; set; }
+    public string Region { get; set; }
+    public string Provider { get; set; }
+    public string CidrRange { get; set; }
+    public List<string> Tags { get; set; }
+}
+```
+
+This structured approach provides:
+- **Richer Metadata**: More detailed information about matched services
+- **Consistent Interface**: Uniform data structure across all cloud providers
+- **Better Performance**: Optimized search and display logic
+- **Enhanced UX**: Improved visual presentation of results
+
+### ASN Integration with Cloudflare Radar
+
+New integration with **Cloudflare Radar API** provides Autonomous System Number (ASN) information:
+
+- **ASN Lookup**: Automatic ASN resolution for searched IP addresses
+- **Organization Details**: Company and ISP information
+- **Enhanced Context**: Additional intelligence for security analysis
+- **Real-time Data**: Live ASN data from Cloudflare's global network
+
+### Improved User Interface
+
+The search results display has been enhanced with:
+- **Visual Service Cards**: Better organized and styled result presentation
+- **Provider Icons**: Clear visual identification of cloud providers
+- **Enhanced Metadata**: More detailed service and regional information
+- **Responsive Design**: Improved mobile and desktop experience
+
+### Build System Improvements
+
+Recent build system enhancements include:
+- **Fixed Solution Build Issues**: Resolved `--output` parameter conflicts in CI/CD
+- **Enhanced Logging**: Better debugging and deployment visibility
+- **Improved Error Handling**: More robust build script error management
+- **Streamlined Build Process**: Improved consistency across development and CI/CD environments
+
 ## Conclusion
 
 Building Albatross has been an incredible journey into modern web security architecture. The combination of Blazor WebAssembly's rich client-side capabilities with Cloudflare Workers' edge computing power creates a robust, secure, and performant solution for IP abuse checking.
@@ -555,6 +656,12 @@ The complete source code for Albatross is available on GitHub, including:
 - GitHub Actions workflows
 
 Whether you're building your own API proxy or exploring modern web security patterns, I hope Albatross serves as both inspiration and a practical reference for your next project.
+
+## 📋 Changelog
+
+- **2025-06-16:** Major update with Oracle Cloud Infrastructure support, enhanced CloudMatch data structures, ASN integration with Cloudflare Radar API, improved UI/UX, and build system fixes
+- **2025-06-15:** Updated tag format and added changelog  
+- **2025-06-10:** Initial publication
 
 ---
 
