@@ -1,6 +1,6 @@
 theme: jekyll-dash
 title: devnomadic
-description: Software Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere.
+description: "/^Dev(Ops|SecOps)?|SRE$/ Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere.
 url: "https://devnomadic.com"
 baseurl: ""
 

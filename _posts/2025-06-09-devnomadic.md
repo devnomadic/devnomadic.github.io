@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Welcome to devnomadic"
+title: "devnomadic"
 description: "Starting my journey as a digital nomad developer"
 date: 2025-06-09
 tags: [introduction, devNomad, remoteWork, digitalNomad, softwareEngineering, travel, lifestyle, blogging]
