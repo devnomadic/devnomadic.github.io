@@ -115,21 +115,6 @@
   line-height: 1.5;
 }
 
-/* Remove text justification on mobile devices */
-@media (max-width: 768px) {
-  body, p, div, article, section {
-    text-align: left !important;
-  }
-  
-  /* Specifically target post content */
-  .post-content, 
-  .post-body, 
-  .content,
-  .post-excerpt {
-    text-align: left !important;
-  }
-}
-
 /* TLDR section styling */
 .post-content h2:has(+ p):where(:contains("TL;DR"), :contains("TLDR")),
 .post-content h2 + p:has-text("📝 TL;DR") {

@@ -40,6 +40,7 @@ Your laptop is your lifeline. I recommend:
 - **Portable monitor** - For dual-screen setups in coworking spaces
 - **Mechanical keyboard** - Compact 60% or TKL for travel
 - **Wireless mouse** - Better ergonomics than trackpad for long sessions
+- **Physical Notebook** - Always handy to scribble thoughts and diagrams. I prefer an A5 Moleskine (Graph Paper)
 
 ## Software Stack
 
@@ -121,6 +122,34 @@ git push --all origin  # All branches to remote
 - Over-communicate in async tools (Slack, Notion)
 - Record video explanations for complex topics
 - Use collaborative coding tools (Live Share, CodeSandbox)
+
+### Laptop Considerations for Remote Work
+
+#### Performance vs Portability Balance
+- **Weight matters**: Aim for under 3 lbs if constantly traveling
+- **Battery life**: Minimum 8 hours for reliable all-day work
+- **Processing power**: M-series MacBooks or AMD Ryzen for efficiency
+
+#### Screen Quality
+- **High resolution**: 1440p minimum for code readability
+- **Color accuracy**: Important for UI/design work
+- **Brightness**: 400+ nits for outdoor/bright environment work
+
+#### Port Selection
+- **USB-C/Thunderbolt**: Future-proof and versatile
+- **HDMI port**: Direct external monitor connection
+- **SD card slot**: Useful for photographers/content creators
+- **Headphone jack**: Backup for wireless audio issues
+
+#### Keyboard & Trackpad
+- **Key travel**: Sufficient feedback for long typing sessions
+- **Trackpad size**: Large enough for gesture navigation
+- **Backlit keys**: Essential for low-light environments
+
+#### Repairability & Support
+- **Global warranty**: Apple Care+ or manufacturer support worldwide
+- **Parts availability**: Consider common models in your travel regions
+- **Local service centers**: Research coverage in frequent destinations
 
 ## Location-Specific Tips
 

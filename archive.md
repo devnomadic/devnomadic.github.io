@@ -29,22 +29,22 @@ permalink: /archive/
 .archive-item {
   margin: 0.75rem 0;
   padding: 1rem;
-  background: linear-gradient(135deg, #fef7f9 0%, #fdf2f5 100%);
+  background: linear-gradient(135deg, #c94570 0%, #b83d64 100%);
   border-radius: 0.5rem;
-  border-left: 4px solid #c94570;
+  border-left: 4px solid #fef7f9;
   box-shadow: 0 2px 4px rgba(201, 69, 112, 0.1);
   transition: all 0.3s ease;
 }
 
 .archive-item:hover {
-  background: linear-gradient(135deg, #fdf2f5 0%, #fcecf1 100%);
+  background: linear-gradient(135deg, #b83d64 0%, #a73459 100%);
   box-shadow: 0 4px 8px rgba(201, 69, 112, 0.15);
   transform: translateY(-1px);
-  border-left: 4px solid #b83d64;
+  border-left: 4px solid #ffffff;
 }
 
 .archive-link {
-  color: #c94570;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 600;
   font-size: 1.1rem;
@@ -52,12 +52,12 @@ permalink: /archive/
 }
 
 .archive-link:hover {
-  color: #b83d64;
+  color: #fef7f9;
   text-decoration: underline;
 }
 
 .archive-date {
-  color: #8a4f60;
+  color: #fdf2f5;
   font-size: 0.9rem;
   display: block;
   margin-top: 0.25rem;
