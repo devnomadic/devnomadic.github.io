@@ -59,4 +59,9 @@ I'm excited to share this journey with you. Whether you're a fellow developer cu
 
 Let's build something amazing together, from anywhere in the world! 🚀
 
+## 📋 Changelog
+
+- **2025-06-09:** Initial publication
+- **2025-06-15:** Updated tag format and added changelog
+
 ---

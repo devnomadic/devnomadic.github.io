@@ -568,6 +568,11 @@ The complete source code for Albatross is available on GitHub, including:
 
 Whether you're building your own API proxy or exploring modern web security patterns, I hope Albatross serves as both inspiration and a practical reference for your next project.
 
+## 📋 Changelog
+
+- **2025-06-10:** Initial publication
+- **2025-06-15:** Updated tag format and added changelog
+
 ---
 
 *Albatross is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com) and the source code is available on [GitHub](https://github.com/your-username/albatross).*

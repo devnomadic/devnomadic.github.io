@@ -27,3 +27,8 @@ This is just sample content to verify that:
 3. Posts appear in the preview deployment
 
 When this works, we know the staging system is functioning correctly!
+
+## 📋 Changelog
+
+- **2025-06-10:** Initial test post creation
+- **2025-06-15:** Added changelog

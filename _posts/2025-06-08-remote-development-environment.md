@@ -145,4 +145,9 @@ The perfect remote development environment is personal and evolves with your nee
 
 The key is having redundancy in everything - internet, power, workspace options. This ensures you can always deliver quality work regardless of where you are in the world.
 
+## 📋 Changelog
+
+- **2025-06-08:** Initial publication
+- **2025-06-15:** Updated tag format and added changelog
+
 ---
