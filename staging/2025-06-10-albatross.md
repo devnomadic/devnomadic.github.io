@@ -39,8 +39,8 @@ For Albatross, I chose a different path: **Cloudflare Workers as a secure API pr
 ```
 ┌─────────────────┐    HMAC Auth     ┌─────────────────┐    API Key    ┌─────────────────┐
 │                 │   ──────────→    │                 │  ──────────→  │                 │
-│  Blazor WASM    │                  │ Cloudflare      │               │   AbuseIPDB     │
-│     Client      │   ←──────────    │    Worker       │  ←──────────  │      API        │
+│  Blazor WASM    │                  │   Cloudflare    │               │   AbuseIPDB     │
+│     Client      │   ←──────────    │     Worker      │  ←──────────  │      API        │
 │                 │    CORS + JSON   │                 │   JSON Data   │                 │
 └─────────────────┘                  └─────────────────┘               └─────────────────┘
 ```
