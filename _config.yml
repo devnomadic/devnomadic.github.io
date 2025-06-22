@@ -1,6 +1,6 @@
 theme: jekyll-dash
 title: devnomadic
-description: "&quot;Dev&#40;Ops&#124;SecOps&#41;&#63;&#124;SRE&quot; Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
+description: "<span style='color:#e74c3c'>&quot;</span><span style='color:#3498db'>Dev</span><span style='color:#f39c12'>&#40;</span><span style='color:#3498db'>Ops</span><span style='color:#e74c3c'>&#124;</span><span style='color:#3498db'>SecOps</span><span style='color:#f39c12'>&#41;</span><span style='color:#9b59b6'>&#63;</span><span style='color:#e74c3c'>&#124;</span><span style='color:#27ae60'>SRE</span><span style='color:#e74c3c'>&quot;</span> Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
 url: "https://devnomadic.com"
 baseurl: ""
 
@@ -12,7 +12,7 @@ author:
   name: devnomadic
   github: devnomadic
   email: drew@devnomadic.com
-  bio: "&quot;Dev&#40;Ops&#124;SecOps&#41;&#63;&#124;SRE&quot; Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
+  bio: "<span style='color:#e74c3c'>&quot;</span><span style='color:#3498db'>Dev</span><span style='color:#f39c12'>&#40;</span><span style='color:#3498db'>Ops</span><span style='color:#e74c3c'>&#124;</span><span style='color:#3498db'>SecOps</span><span style='color:#f39c12'>&#41;</span><span style='color:#9b59b6'>&#63;</span><span style='color:#e74c3c'>&#124;</span><span style='color:#27ae60'>SRE</span><span style='color:#e74c3c'>&quot;</span> Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
   avatar: "/assets/avatar.gif"
   
 # Build settings

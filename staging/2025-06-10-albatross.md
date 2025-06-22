@@ -280,7 +280,8 @@ Several exciting features are planned for future releases:
 2. **Analytics Dashboard**: Track usage patterns and abuse attempts
 3. **API Key Rotation**: Automated rotation of AbuseIPDB API keys
 4. **Multi-Provider Support**: Integration with additional threat intelligence APIs
-5. **Real-Time Notifications**: WebSocket-based alerts for high-risk IPs
+5. **Gen-AI Search**: AI-powered search for IP reputation and abuse history
+6. **Real-Time Notifications**: WebSocket-based alerts for high-risk IPs
 
 ## Cloud IP Manifest Search: Identifying Cloud Infrastructure
 
@@ -634,6 +635,16 @@ Recent build system enhancements include:
 - **Improved Error Handling**: More robust build script error management
 - **Streamlined Build Process**: Improved consistency across development and CI/CD environments
 
+### Enhanced Security and Input Validation (June 2025)
+
+Recent security and user experience improvements include:
+
+- **Public IP Validation**: Comprehensive validation that only accepts public routable IP addresses, blocking all private networks (10.x.x.x, 192.168.x.x, 172.16-31.x.x), loopback addresses (127.x.x.x), link-local, multicast, and other reserved ranges according to RFC standards
+- **Improved Error Messaging**: Clear, user-friendly error messages explaining why certain IP addresses aren't accepted
+- **Better UI Layout**: Fixed layout shifting issues during search operations with dedicated result containers
+- **Enhanced User Guidance**: Updated placeholder text and help documentation to clarify IP address requirements
+- **RFC Compliance**: Full compliance with RFC 1918 (Private Address Space), RFC 3927 (Link-Local), RFC 6598 (Carrier-Grade NAT), and other relevant networking standards
+
 ## Conclusion
 
 Building Albatross has been an incredible journey into modern web security architecture. The combination of Blazor WebAssembly's rich client-side capabilities with Cloudflare Workers' edge computing power creates a robust, secure, and performant solution for IP abuse checking.
@@ -659,10 +670,11 @@ Whether you're building your own API proxy or exploring modern web security patt
 
 ## 📋 Changelog
 
+- **2025-06-22:** Enhanced security with comprehensive public IP validation (RFC compliant), improved UI layout stability, better error messaging, and enhanced user guidance
 - **2025-06-16:** Major update with Oracle Cloud Infrastructure support, enhanced CloudMatch data structures, ASN integration with Cloudflare Radar API, improved UI/UX, and build system fixes
 - **2025-06-15:** Updated tag format and added changelog  
 - **2025-06-10:** Initial publication
 
 ---
 
-*Albatross is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com) and the source code is available on [GitHub](https://github.com/your-username/albatross).*
+*Albatross is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com) and the source code is available on [GitHub](https://github.com/devnomadic/albatross).*
