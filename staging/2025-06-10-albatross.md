@@ -15,6 +15,18 @@ tags: [blazorWebAssembly, cloudflareWorkers, devSecOps, webDevelopment, cyberSec
 Built **Albatross**, a secure IP abuse checker using Blazor WebAssembly + Cloudflare Workers. Key features:
 - 🔐 **Secure API proxy** with HMAC authentication (no exposed API keys)
 - ⚡ **Fast client-side app** with server-side API protection
+- �️ **Real-time IP reputation checking** via AbuseIPDB
+- 🏗️ **Modern architecture** combining the best of client and edge computing
+
+This algorithm efficiently compares IP addresses against CIDR ranges by:
+1. **Splitting the CIDR** notation (e.g., "10.0.0.0/8")
+2. **Converting to bytes** for efficient comparison
+3. **Comparing full bytes** first (faster than bit-by-bit)
+4. **Handling remainder bits** with bitwise masking
+5. **Early termination** on mismatch for performance
+
+## Security Implementationion (no exposed API keys)
+- ⚡ **Fast client-side app** with server-side API protection
 - 🛡️ **Real-time IP reputation checking** via AbuseIPDB
 - 🏗️ **Modern architecture** combining the best of client and edge computing
 
@@ -39,8 +51,8 @@ For Albatross, I chose a different path: **Cloudflare Workers as a secure API pr
 ```
 ┌─────────────────┐    HMAC Auth     ┌─────────────────┐    API Key    ┌─────────────────┐
 │                 │   ──────────→    │                 │  ──────────→  │                 │
-│  Blazor WASM    │                  │   Cloudflare    │               │   AbuseIPDB     │
-│     Client      │   ←──────────    │     Worker      │  ←──────────  │      API        │
+│  Blazor WASM    │                  │ Cloudflare      │               │   AbuseIPDB     │
+│     Client      │   ←──────────    │    Worker       │  ←──────────  │      API        │
 │                 │    CORS + JSON   │                 │   JSON Data   │                 │
 └─────────────────┘                  └─────────────────┘               └─────────────────┘
 ```
@@ -59,12 +71,20 @@ One of the most innovative aspects of Albatross is its build-time authentication
 ### PowerShell Key Generation Script
 
 ```powershell
-# Generate-AuthKey.ps1
+# Generate-AuthKey.ps1 - Updated implementation
 function Generate-SecureKey {
-    $rng = [System.Security.Cryptography.RNGCryptoServiceProvider]::Create()
+    # Generate a cryptographically secure random key
     $keyBytes = New-Object byte[] 32  # 256 bits
+    $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
     $rng.GetBytes($keyBytes)
-    return [Convert]::ToBase64String($keyBytes)
+    
+    # Convert to Base64 and make UTF-8 compatible
+    $randomBase64 = [System.Convert]::ToBase64String($keyBytes)
+    $authKeyString = $randomBase64.Substring(0, [Math]::Min(32, $randomBase64.Length)).Replace("/", "_").Replace("+", "-")
+    
+    # Convert UTF-8 string to base64 for storage
+    $authKeyBytes = [System.Text.Encoding]::UTF8.GetBytes($authKeyString)
+    return [System.Convert]::ToBase64String($authKeyBytes)
 }
 
 $authKey = Generate-SecureKey
@@ -83,7 +103,7 @@ This approach provides several security benefits:
 The key generation is seamlessly integrated into the .NET build process using custom MSBuild targets:
 
 ```xml
-<Target Name="GenerateAuthKey" BeforeTargets="CoreCompile">
+<Target Name="GenerateAuthKey" BeforeTargets="BeforeCompile" Condition="'$(SkipCodeGeneration)' != 'true' AND '$(DesignTimeBuild)' != 'true'">
     <Exec Command="pwsh -ExecutionPolicy Bypass -File &quot;$(ProjectDir)Generate-AuthKey.ps1&quot;" 
           ContinueOnError="false" />
 </Target>
@@ -103,9 +123,35 @@ The authentication system uses HMAC-SHA256 to sign requests, ensuring both authe
 ```csharp
 private string GenerateHmacToken(string requestUrl)
 {
-    using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(BuildConstants.AuthKey));
-    var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(requestUrl.ToLower()));
-    return Convert.ToBase64String(hash);
+    if (string.IsNullOrEmpty(_authKey))
+    {
+        Console.WriteLine("Debug: Auth key is null or empty");
+        return string.Empty;
+    }
+
+    if (string.IsNullOrEmpty(requestUrl))
+    {
+        Console.WriteLine("Debug: Request URL is null or empty");
+        return string.Empty;
+    }
+
+    try
+    {
+        Console.WriteLine($"Debug: Generating HMAC for URL: {requestUrl}");
+        Console.WriteLine($"Debug: Using auth key: {_authKey}");
+
+        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_authKey));
+        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(requestUrl));
+        var token = Convert.ToBase64String(hash);
+        
+        Console.WriteLine($"Debug: Generated HMAC hash: {token}");
+        return token;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Debug: Exception in GenerateHmacToken: {ex.Message}");
+        return string.Empty;
+    }
 }
 ```
 
@@ -114,7 +160,7 @@ private string GenerateHmacToken(string requestUrl)
 ```javascript
 async function validateHmacToken(receivedToken, requestUrl) {
     const keyBytes = new TextEncoder().encode(AUTH_KEY);
-    const messageBytes = new TextEncoder().encode(requestUrl);
+    const messageBytes = new TextEncoder().encode(message);
     
     const cryptoKey = await crypto.subtle.importKey(
         'raw', keyBytes, 
@@ -412,23 +458,38 @@ private bool IsIpInRange(IPAddress ipAddress, string cidrRange)
         var networkAddress = IPAddress.Parse(parts[0]);
         var prefixLength = int.Parse(parts[1]);
         
-        // Convert to bytes for bitwise operations
         var ipBytes = ipAddress.GetAddressBytes();
         var networkBytes = networkAddress.GetAddressBytes();
         
-        // Handle IPv4 vs IPv6 compatibility
         if (ipBytes.Length != networkBytes.Length)
             return false;
-            
-        // Calculate subnet mask
-        var totalBits = ipBytes.Length * 8;
-        var maskBits = prefixLength;
         
-        // Perform bitwise comparison
-        for (int byteIndex = 0; byteIndex < ipBytes.Length; byteIndex++)
+        var bytesToCheck = prefixLength / 8;
+        var remainderBits = prefixLength % 8;
+        
+        // Compare full bytes
+        for (int i = 0; i < bytesToCheck; i++)
         {
-            var bitsInThisByte = Math.Min(8, Math.Max(0, maskBits - (byteIndex * 8)));
-            if (bitsInThisByte == 0) break;
+            if (ipBytes[i] != networkBytes[i])
+                return false;
+        }
+        
+        // Check remainder bits if any
+        if (remainderBits > 0 && bytesToCheck < ipBytes.Length)
+        {
+            var mask = (byte)(0xFF << (8 - remainderBits));
+            if ((ipBytes[bytesToCheck] & mask) != (networkBytes[bytesToCheck] & mask))
+                return false;
+        }
+        
+        return true;
+    }
+    catch
+    {
+        return false;
+    }
+}
+```
             
             var mask = (byte)(0xFF << (8 - bitsInThisByte));
             if ((ipBytes[byteIndex] & mask) != (networkBytes[byteIndex] & mask))
@@ -576,6 +637,140 @@ Several exciting improvements are planned:
 
 The Cloud IP Manifest Search feature demonstrates how modern web applications can provide enterprise-grade functionality while maintaining simplicity and performance. By leveraging official cloud provider data and efficient client-side processing, Albatross delivers accurate, real-time cloud infrastructure attribution that's invaluable for security professionals and network administrators.
 
+## Recent Enhancements (July 2025)
+
+Since the June updates, Albatross has received several critical improvements focused on deployment reliability, security hardening, and cross-browser compatibility:
+
+### Static Sitemap Implementation
+
+A significant architectural change was made to improve SEO and deployment reliability:
+
+- **Removed Dynamic Generation**: Eliminated all dynamic sitemap.xml generation from MSBuild targets and PowerShell scripts
+- **Static SEO Optimization**: Implemented a manually-maintained sitemap.xml with fixed URLs and appropriate metadata
+- **Improved Indexing**: Better search engine discoverability with consistent sitemap structure
+- **Simplified Deployment**: Reduced build complexity by removing dynamic XML generation
+
+The static sitemap approach provides more reliable SEO benefits while simplifying the build process:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://albatross.devnomadic.com/</loc>
+    <lastmod>2025-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- IP Manifest Files -->
+  <url>
+    <loc>https://albatross.devnomadic.com/ip-manifests/AWS.json</loc>
+    <lastmod>2025-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
+```
+
+### Cross-Browser ASCII Art Rendering
+
+Addressed significant rendering differences between Chrome and Firefox for ASCII art images:
+
+- **Pixel-Perfect Rendering**: Added comprehensive `image-rendering` CSS properties for consistent display across browsers
+- **Cross-Browser Compatibility**: Implemented browser-specific rendering hints for Chrome, Firefox, Safari, and IE
+- **Responsive Scaling**: Enhanced mobile responsiveness with proper pixel scaling for ASCII art
+- **Performance Optimization**: Eliminated image interpolation artifacts that caused blurry ASCII art
+
+```css
+img[alt="ascii-text-art-albatross"] {
+    width: 25% !important;
+    max-width: 40% !important;
+    /* Pixel-perfect rendering for ASCII art */
+    image-rendering: pixelated !important;
+    image-rendering: -moz-crisp-edges !important;
+    image-rendering: crisp-edges !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    -ms-interpolation-mode: nearest-neighbor !important;
+}
+```
+
+### Production Deployment Security Hardening
+
+Major security improvements were implemented in the GitHub Actions deployment pipeline:
+
+#### **Fixed Script Injection Vulnerability**
+The deployment pipeline was vulnerable to script injection through commit messages. This was resolved with comprehensive input sanitization:
+
+```bash
+# Safely sanitize commit message to prevent injection
+SAFE_COMMIT_MESSAGE="$( printf '%s' '${{ github.event.head_commit.message }}' | head -c 500 | tr -d '\0\r' | sed 's/[`$"\\]/\\&/g' )"
+```
+
+**Security Controls:**
+- **Character Limiting**: Truncated to 500 characters to prevent excessive payloads
+- **Dangerous Character Escaping**: Escaped backticks, dollar signs, quotes, and backslashes
+- **Null Byte Removal**: Eliminated null characters and carriage returns
+- **Command Injection Prevention**: Blocked all forms of command substitution and variable expansion
+
+#### **Enhanced Release Naming**
+Improved GitHub release naming to match application build identifiers:
+
+- **Build Timestamp Format**: Uses the same `yyyyMMdd-HHmm` format displayed in the application
+- **Short SHA Integration**: Includes 8-character commit SHA for unique identification
+- **Consistent Versioning**: Release names now match internal build identifiers
+
+```yaml
+RELEASE_NAME="${{ needs.build-and-deploy.outputs.build-timestamp }} (${{ needs.build-and-deploy.outputs.build-id }})"
+# Example: "Albatross Build 20250719-1430 (a1b2c3d4)"
+```
+
+#### **Cloudflare Pages Production Deployment Fix**
+Resolved deployment issues where builds were incorrectly deploying to preview environments:
+
+- **Removed Branch Parameters**: Eliminated `--branch` and `--production` flags that were causing deployment confusion  
+- **Default Production Behavior**: Leveraged Cloudflare Pages' default production deployment when no branch is specified
+- **Simplified Command**: Streamlined deployment command for reliability
+
+```bash
+# Simplified production deployment (deploys to production by default)
+npx wrangler pages deploy ./dist/wwwroot --project-name ${{ secrets.CLOUDFLARE_PAGES_PROJECT }}
+```
+
+#### **Artifact Security Enhancement**
+Improved release artifact handling to exclude sensitive files:
+
+- **Excluded Worker Files**: Prevented `cloudflare-worker.js` from being included in public releases
+- **Security Logging**: Added clear audit trail showing which files are excluded and why
+- **Compressed Archives**: Enhanced artifact upload with compressed directory archives
+- **Selective Distribution**: Only includes safe artifacts (SPA files, build constants, version info)
+
+```bash
+# Skip sensitive files during artifact upload
+if [ -f "$file" ] && [ "$file" != "cloudflare-worker.js" ]; then
+    echo "Uploading file: $file"
+    gh release upload "${TAG_NAME}" "$file"
+elif [ -f "$file" ] && [ "$file" = "cloudflare-worker.js" ]; then
+    echo "Skipping cloudflare-worker.js (contains sensitive data)"
+fi
+```
+
+### Mobile Loading Screen Fix
+
+Addressed visual issues with the loading screen on mobile devices:
+
+- **Fixed Icon Stretching**: Resolved aspect ratio issues on mobile screens
+- **Enhanced CSS Specificity**: Added `!important` declarations to prevent style conflicts
+- **Responsive Sizing**: Proper scaling for different device sizes (80px desktop, 64px tablet, 48px mobile)
+- **Conflict Resolution**: Changed alt text to prevent generic image style conflicts
+
+### Build System Reliability
+
+Multiple improvements to the build and deployment pipeline:
+
+- **Dependency Management**: Enhanced npm package handling in CI/CD
+- **Error Handling**: Improved build script error detection and reporting  
+- **Version Consistency**: Aligned version numbering between application and releases
+- **Deployment Validation**: Added verification steps for successful deployments
+
 ## Recent Enhancements (June 2025)
 
 Since the initial release, Albatross has received several significant improvements that enhance both functionality and user experience:
@@ -670,6 +865,7 @@ Whether you're building your own API proxy or exploring modern web security patt
 
 ## 📋 Changelog
 
+- **2025-07-19:** Major deployment and security update with static sitemap implementation, cross-browser ASCII art rendering fixes, script injection vulnerability patching, Cloudflare Pages production deployment fixes, mobile loading screen improvements, and enhanced release artifact security
 - **2025-06-22:** Enhanced security with comprehensive public IP validation (RFC compliant), improved UI layout stability, better error messaging, and enhanced user guidance
 - **2025-06-16:** Major update with Oracle Cloud Infrastructure support, enhanced CloudMatch data structures, ASN integration with Cloudflare Radar API, improved UI/UX, and build system fixes
 - **2025-06-15:** Updated tag format and added changelog  
