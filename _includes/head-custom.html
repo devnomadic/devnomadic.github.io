@@ -15,3 +15,34 @@
   background-color: #e8eaed;
   color: #202124;
 }
+</style>
+
+<!-- Mermaid.js for diagram rendering -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    mermaid.initialize({ 
+      startOnLoad: true,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#ff4757',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#ff3742',
+        lineColor: '#5f27cd',
+        secondaryColor: '#f1f2f6',
+        tertiaryColor: '#ffffff'
+      }
+    });
+    
+    // Convert mermaid code blocks to mermaid divs
+    document.querySelectorAll('pre code.language-mermaid').forEach(function(block) {
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = block.textContent;
+      block.parentNode.parentNode.replaceChild(mermaidDiv, block.parentNode);
+    });
+    
+    // Re-render mermaid after DOM manipulation
+    mermaid.init();
+  });
+</script>
