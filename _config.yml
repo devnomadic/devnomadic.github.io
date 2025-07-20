@@ -1,7 +1,7 @@
 theme: jekyll-dash
 title: devnomadic
-description: Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere.
-url: "https://devnomadic.github.io"
+description: "<span style='color:#e74c3c'>&quot;</span><span style='color:#3498db'>Dev</span><span style='color:#f39c12'>&#40;</span><span style='color:#3498db'>Ops</span><span style='color:#e74c3c'>&#124;</span><span style='color:#3498db'>SecOps</span><span style='color:#f39c12'>&#41;</span><span style='color:#9b59b6'>&#63;</span><span style='color:#e74c3c'>&#124;</span><span style='color:#27ae60'>SRE</span><span style='color:#e74c3c'>&quot;</span> Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
+url: "https://devnomadic.com"
 baseurl: ""
 
 # Jekyll pagination (required for home page)
@@ -12,7 +12,7 @@ author:
   name: devnomadic
   github: devnomadic
   email: drew@devnomadic.com
-  bio: "Software engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
+  bio: "<span style='color:#e74c3c'>&quot;</span><span style='color:#3498db'>Dev</span><span style='color:#f39c12'>&#40;</span><span style='color:#3498db'>Ops</span><span style='color:#e74c3c'>&#124;</span><span style='color:#3498db'>SecOps</span><span style='color:#f39c12'>&#41;</span><span style='color:#9b59b6'>&#63;</span><span style='color:#e74c3c'>&#124;</span><span style='color:#27ae60'>SRE</span><span style='color:#e74c3c'>&quot;</span> Engineer and digital nomad currently exploring the world. I write about remote work, travel, and building software from anywhere."
   avatar: "/assets/avatar.gif"
   
 # Build settings
@@ -21,6 +21,11 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-paginate
+  - jekyll-mermaid
+
+# Mermaid configuration
+mermaid:
+  src: 'https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js'
 
 # Theme settings
 dash:
@@ -28,6 +33,14 @@ dash:
   show_author: true
   avatar_source: "local"
   avatar_path: "/assets/avatar.gif"
+  show_nav: true
+  nav_links:
+    - url: /about/
+      title: About
+    - url: /archive/
+      title: Archive
+    - url: /tags/
+      title: Tags
   social_links:
     - url: https://github.com/devnomadic
       icon: github

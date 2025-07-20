@@ -1,47 +1,95 @@
 /* Custom styles for devnomadic */
 
-/* Post tags styling */
+/* Keep theme's original green tag styling */
+.tag, .tag-cloud > a {
+  color: #50BD6A !important;
+  background-color: rgb(242.0163636364, 245.5254545455, 248.6836363636) !important;
+  padding: 0.3em 0.6em !important;
+  border-radius: 0.3em !important;
+  display: inline-block !important;
+  margin: 0.3em 0.3em 0.3em 0 !important;
+  text-decoration: none !important;
+}
+
+.tag:hover, .tag-cloud > a:hover {
+  background-color: white !important;
+  color: rgb(154.0663900415, 216.9336099585, 169.0622406639) !important;
+  text-decoration: none !important;
+}
+
+/* Keep Font Awesome icon for tags */
+.tag:before, .tag-cloud > a:before {
+  content: "\f02b" !important;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  margin-right: 0.5em !important;
+  display: inline !important;
+}
+
+/* Post tags styling - also green */
 .post-tags {
   margin: 0.5rem 0;
 }
 
 .post-tags .tag {
-  display: inline-block;
-  background-color: #f1f3f4;
-  color: #5f6368;
-  padding: 0.2rem 0.5rem;
-  margin: 0.1rem 0.2rem 0.1rem 0;
-  border-radius: 0.25rem;
-  font-size: 0.8rem;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
+  color: #50BD6A !important;
+  background-color: rgb(242.0163636364, 245.5254545455, 248.6836363636) !important;
+  padding: 0.3em 0.6em !important;
+  border-radius: 0.3em !important;
+  display: inline-block !important;
+  margin: 0.3em 0.3em 0.3em 0 !important;
+  text-decoration: none !important;
 }
 
 .post-tags .tag:hover {
-  background-color: #e8eaed;
-  color: #202124;
+  background-color: white !important;
+  color: rgb(154.0663900415, 216.9336099585, 169.0622406639) !important;
 }
 
-/* Tag cloud styling */
-.tag-cloud .tag-item {
-  display: inline-block;
-  margin: 0.2rem 0.5rem 0.2rem 0;
+.post-tags .tag:before {
+  content: "\f02b" !important;
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  margin-right: 0.5em !important;
+  display: inline !important;
 }
 
-.tag-cloud .tag-link {
+/* Tag posts styling for tags page */
+.tag-posts {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.tag-posts li {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
   background-color: #f8f9fa;
-  color: #5f6368;
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.3rem;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+  border-radius: 0.25rem;
+  border-left: 3px solid #c94570;
 }
 
-.tag-cloud .tag-link:hover {
-  background-color: #e8eaed;
-  color: #202124;
-  transform: translateY(-1px);
+.tag-posts li a {
+  color: #c94570;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.tag-posts li a:hover {
+  text-decoration: underline;
+}
+
+.post-date {
+  color: #5f6368;
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .post-date {
+    font-size: 0.8em;
+  }
 }
 
 /* Post link wrapper styling */
@@ -65,4 +113,82 @@
   margin-top: 0.5rem;
   color: #202124;
   line-height: 1.5;
+}
+
+/* TLDR section styling */
+.post-content h2:has(+ p):where(:contains("TL;DR"), :contains("TLDR")),
+.post-content h2 + p:has-text("📝 TL;DR") {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+  border-left: 4px solid #4285f4;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Alternative approach - target by content */
+.post-content > h2 + p:first-of-type,
+.post-content h2 + p {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+  border-left: 4px solid #4285f4;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* TLDR heading style */
+.post-content h2:contains("TL;DR") {
+  color: #4285f4;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Navigation styling */
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.site-nav {
+  display: block !important;
+  clear: both;
+  border-top: 1px solid rgba(255, 167, 196, 0.3);
+  padding-top: 0.75em;
+  margin-top: 0.5em;
+  width: 100%;
+}
+
+.nav-link {
+  display: inline-block;
+  margin-right: 2em;
+  color: #ffa7c4 !important;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .social_links {
+    margin-top: 0.5em;
+  }
+  
+  .nav-link {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 0.5em;
+  }
 }

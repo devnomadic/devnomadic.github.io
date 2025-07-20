@@ -11,4 +11,4 @@ Allow: /tag/
 Allow: /blog/
 
 # Sitemap location
-Sitemap: https://devnomadic.github.io/sitemap.xml
+Sitemap: https://devnomadic.com/sitemap.xml
