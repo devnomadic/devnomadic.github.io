@@ -321,12 +321,20 @@ Response times are consistently under 100ms thanks to:
 
 Several exciting features are planned for future releases:
 
+### Core Application Features
 1. **Rate Limiting**: Implement per-IP rate limiting in the Worker
 2. **Analytics Dashboard**: Track usage patterns and abuse attempts
 3. **API Key Rotation**: Automated rotation of AbuseIPDB API keys
 4. **Multi-Provider Support**: Integration with additional threat intelligence APIs
 5. **Gen-AI Search**: AI-powered search for IP reputation and abuse history
 6. **Real-Time Notifications**: WebSocket-based alerts for high-risk IPs
+
+### Cloud IP Search Enhancements
+1. **Additional Providers**: IBM Cloud, Alibaba Cloud, DigitalOcean support
+2. **Historical Data**: Track IP range changes over time
+3. **Geolocation Integration**: Combine cloud attribution with geographic data
+4. **API Integration**: Programmatic access to cloud IP attribution
+5. **Bulk Processing**: Upload and process IP lists
 
 ## Cloud IP Manifest Search: Identifying Cloud Infrastructure
 
@@ -609,16 +617,6 @@ The cloud IP search functionality provides significant security value:
 2. **Network Forensics**: Understand traffic patterns and service dependencies  
 3. **Compliance Validation**: Verify that data flows through expected cloud regions
 4. **Incident Response**: Rapidly classify IP addresses during security investigations
-
-### Future Enhancements
-
-Several exciting improvements are planned:
-
-1. **Additional Providers**: Oracle Cloud, IBM Cloud, Alibaba Cloud support
-2. **Historical Data**: Track IP range changes over time
-3. **Geolocation Integration**: Combine cloud attribution with geographic data
-4. **API Integration**: Programmatic access to cloud IP attribution
-5. **Bulk Processing**: Upload and process IP lists
 
 The Cloud IP Manifest Search feature demonstrates how modern web applications can provide enterprise-grade functionality while maintaining simplicity and performance. By leveraging official cloud provider data and efficient client-side processing, Albatross delivers accurate, real-time cloud infrastructure attribution that's invaluable for security professionals and network administrators.
 
