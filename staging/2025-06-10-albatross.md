@@ -858,4 +858,38 @@ Whether you're building your own API proxy or exploring modern web security patt
 
 ---
 
+**Albatross** is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com/) and the source code is available on [GitHub](https://github.com/devnomadic/albatross).
+
+<script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({ 
+      startOnLoad: false,
+      theme: 'default',
+      securityLevel: 'loose'
+    });
+    
+    // Convert mermaid code blocks
+    const blocks = document.querySelectorAll('pre code.language-mermaid');
+    blocks.forEach(function(block, i) {
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.style.textAlign = 'center';
+      div.style.margin = '20px 0';
+      div.textContent = block.textContent.trim();
+      
+      const pre = block.closest('pre');
+      if (pre && pre.parentNode) {
+        pre.parentNode.replaceChild(div, pre);
+      }
+    });
+    
+    if (blocks.length > 0) {
+      mermaid.init();
+    }
+  }
+});
+</script>
+
 *Albatross is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com) and the source code is available on [GitHub](https://github.com/devnomadic/albatross).*
