@@ -21,6 +21,7 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-paginate
+  - jekyll-mermaid
 
 # Theme settings
 dash:

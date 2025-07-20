@@ -48,13 +48,12 @@ For Albatross, I chose a different path: **Cloudflare Workers as a secure API pr
 
 ## Architecture Overview
 
-```
-┌─────────────────┐    HMAC Auth     ┌─────────────────┐    API Key    ┌─────────────────┐
-│                 │   ──────────→    │                 │  ──────────→  │                 │
-│  Blazor WASM    │                  │ Cloudflare      │               │   AbuseIPDB     │
-│     Client      │   ←──────────    │    Worker       │  ←──────────  │      API        │
-│                 │    CORS + JSON   │                 │   JSON Data   │                 │
-└─────────────────┘                  └─────────────────┘               └─────────────────┘
+```mermaid
+graph LR
+    A[Blazor WASM<br/>Client] -->|HMAC Auth| B[Cloudflare<br/>Worker]
+    B -->|API Key| C[AbuseIPDB<br/>API]
+    C -->|JSON Data| B
+    B -->|CORS + JSON| A
 ```
 
 ### Key Components:
@@ -346,26 +345,12 @@ In today's cloud-first world, understanding which cloud provider owns a specific
 
 The system maintains up-to-date IP range manifests from four major cloud providers:
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   AWS IP Ranges │    │ Azure IP Ranges │    │  GCP IP Ranges  │    │  OCI IP Ranges  │
-│                 │    │                 │    │                 │    │                 │
-│ • 76,000+ IPs   │    │ • 135,000+ IPs  │    │ • 3,100+ IPs    │    │ • 2,800+ IPs    │
-│ • Regional Data │    │ • Service Tags  │    │ • Scope Data    │    │ • Regional Tags │
-│ • Service Info  │    │ • Platform Info │    │ • Global Ranges │    │ • Service Data  │
-└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
-          │                       │                       │                       │
-          └───────────────────────┼───────────────────────┼───────────────────────┘
-                                  │                       │
-                          ┌─────────────────┐             │
-                          │  Albatross      │             │
-                          │  Search Engine  │             │
-                          │                 │             │
-                          │ • CIDR Matching │             │
-                          │ • IPv4 & IPv6   │             │
-                          │ • Real-time     │             │
-                          │ • Parallel Exec │←────────────┘
-                          └─────────────────┘
+```mermaid
+graph TD
+    A[AWS IP Ranges<br/>• 76,000+ IPs<br/>• Regional Data<br/>• Service Info] --> E[Albatross<br/>Search Engine<br/>• CIDR Matching<br/>• IPv4 & IPv6<br/>• Real-time<br/>• Parallel Exec]
+    B[Azure IP Ranges<br/>• 135,000+ IPs<br/>• Service Tags<br/>• Platform Info] --> E
+    C[GCP IP Ranges<br/>• 3,100+ IPs<br/>• Scope Data<br/>• Global Ranges] --> E
+    D[OCI IP Ranges<br/>• 2,800+ IPs<br/>• Regional Tags<br/>• Service Data] --> E
 ```
 
 ### Official Data Sources
