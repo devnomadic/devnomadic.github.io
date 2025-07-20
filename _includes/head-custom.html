@@ -20,29 +20,47 @@
 <!-- Mermaid.js for diagram rendering -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    mermaid.initialize({ 
-      startOnLoad: true,
-      theme: 'default',
-      themeVariables: {
-        primaryColor: '#ff4757',
-        primaryTextColor: '#fff',
-        primaryBorderColor: '#ff3742',
-        lineColor: '#5f27cd',
-        secondaryColor: '#f1f2f6',
-        tertiaryColor: '#ffffff'
+(function() {
+  function initializeMermaid() {
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({ 
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#ff4757',
+          primaryTextColor: '#fff',
+          primaryBorderColor: '#ff3742',
+          lineColor: '#5f27cd',
+          secondaryColor: '#f1f2f6',
+          tertiaryColor: '#ffffff'
+        }
+      });
+      
+      // Convert mermaid code blocks to mermaid divs
+      const mermaidBlocks = document.querySelectorAll('pre code.language-mermaid');
+      mermaidBlocks.forEach(function(block, index) {
+        const mermaidDiv = document.createElement('div');
+        mermaidDiv.className = 'mermaid';
+        mermaidDiv.id = 'mermaid-' + index;
+        mermaidDiv.textContent = block.textContent;
+        block.parentNode.parentNode.replaceChild(mermaidDiv, block.parentNode);
+      });
+      
+      // Initialize mermaid after DOM manipulation
+      if (mermaidBlocks.length > 0) {
+        mermaid.init();
       }
-    });
-    
-    // Convert mermaid code blocks to mermaid divs
-    document.querySelectorAll('pre code.language-mermaid').forEach(function(block) {
-      const mermaidDiv = document.createElement('div');
-      mermaidDiv.className = 'mermaid';
-      mermaidDiv.textContent = block.textContent;
-      block.parentNode.parentNode.replaceChild(mermaidDiv, block.parentNode);
-    });
-    
-    // Re-render mermaid after DOM manipulation
-    mermaid.init();
-  });
+    }
+  }
+  
+  // Try to initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeMermaid);
+  } else {
+    initializeMermaid();
+  }
+  
+  // Fallback: try again after a short delay
+  setTimeout(initializeMermaid, 1000);
+})();
 </script>
