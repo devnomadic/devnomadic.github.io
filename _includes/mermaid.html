@@ -1,0 +1,29 @@
+<!-- Mermaid diagram include -->
+<div class="mermaid" id="mermaid-{{ include.id | default: 'default' }}">
+{{ include.content }}
+</div>
+
+<script>
+// Initialize this specific mermaid diagram
+(function() {
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({ 
+      startOnLoad: false,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#ff4757',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#ff3742',
+        lineColor: '#5f27cd',
+        secondaryColor: '#f1f2f6',
+        tertiaryColor: '#ffffff'
+      }
+    });
+    
+    const element = document.getElementById('mermaid-{{ include.id | default: "default" }}');
+    if (element) {
+      mermaid.init(undefined, element);
+    }
+  }
+})();
+</script>

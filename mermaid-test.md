@@ -7,7 +7,7 @@ title: Mermaid Test
 
 This is a test page to verify Mermaid.js integration is working properly.
 
-## Simple Flow Chart
+## Method 1: Code Blocks (Automatic Conversion)
 
 ```mermaid
 graph TD
@@ -18,7 +18,7 @@ graph TD
     C --> E[End]
 ```
 
-## Architecture Diagram
+## Method 2: Architecture Diagram
 
 ```mermaid
 graph LR
@@ -28,4 +28,14 @@ graph LR
     B -->|CORS + JSON| A
 ```
 
+## Method 3: Include Method (Alternative)
+
+{% include mermaid.html id="test-include" content="
+graph TD
+    A[Jekyll Include] --> B[Mermaid Rendering]
+    B --> C[Success!]
+" %}
+
 If you can see rendered diagrams above instead of code blocks, Mermaid.js is working correctly!
+
+Check the browser console for debug messages.
