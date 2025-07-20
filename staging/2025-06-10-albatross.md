@@ -48,13 +48,13 @@ For Albatross, I chose a different path: **Cloudflare Workers as a secure API pr
 
 ## Architecture Overview
 
-```mermaid
+{% mermaid %}
 graph LR
     A[Blazor WASM<br/>Client] -->|HMAC Auth| B[Cloudflare<br/>Worker]
     B -->|API Key| C[AbuseIPDB<br/>API]
     C -->|JSON Data| B
     B -->|CORS + JSON| A
-```
+{% endmermaid %}
 
 ### Key Components:
 
@@ -345,13 +345,13 @@ In today's cloud-first world, understanding which cloud provider owns a specific
 
 The system maintains up-to-date IP range manifests from four major cloud providers:
 
-```mermaid
+{% mermaid %}
 graph TD
     A[AWS IP Ranges<br/>• 76,000+ IPs<br/>• Regional Data<br/>• Service Info] --> E[Albatross<br/>Search Engine<br/>• CIDR Matching<br/>• IPv4 & IPv6<br/>• Real-time<br/>• Parallel Exec]
     B[Azure IP Ranges<br/>• 135,000+ IPs<br/>• Service Tags<br/>• Platform Info] --> E
     C[GCP IP Ranges<br/>• 3,100+ IPs<br/>• Scope Data<br/>• Global Ranges] --> E
     D[OCI IP Ranges<br/>• 2,800+ IPs<br/>• Regional Tags<br/>• Service Data] --> E
-```
+{% endmermaid %}
 
 ### Official Data Sources
 
@@ -859,37 +859,3 @@ Whether you're building your own API proxy or exploring modern web security patt
 ---
 
 **Albatross** is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com/) and the source code is available on [GitHub](https://github.com/devnomadic/albatross).
-
-<script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  if (typeof mermaid !== 'undefined') {
-    mermaid.initialize({ 
-      startOnLoad: false,
-      theme: 'default',
-      securityLevel: 'loose'
-    });
-    
-    // Convert mermaid code blocks
-    const blocks = document.querySelectorAll('pre code.language-mermaid');
-    blocks.forEach(function(block, i) {
-      const div = document.createElement('div');
-      div.className = 'mermaid';
-      div.style.textAlign = 'center';
-      div.style.margin = '20px 0';
-      div.textContent = block.textContent.trim();
-      
-      const pre = block.closest('pre');
-      if (pre && pre.parentNode) {
-        pre.parentNode.replaceChild(div, pre);
-      }
-    });
-    
-    if (blocks.length > 0) {
-      mermaid.init();
-    }
-  }
-});
-</script>
-
-*Albatross is live at [https://albatross.devnomadic.com](https://albatross.devnomadic.com) and the source code is available on [GitHub](https://github.com/devnomadic/albatross).*

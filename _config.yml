@@ -17,16 +17,15 @@ author:
   
 # Build settings
 markdown: kramdown
-kramdown:
-  input: GFM
-  syntax_highlighter: rouge
-  syntax_highlighter_opts:
-    block:
-      line_numbers: false
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-paginate
+  - jekyll-mermaid
+
+# Mermaid configuration
+mermaid:
+  src: 'https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js'
 
 # Theme settings
 dash:
