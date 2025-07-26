@@ -11,10 +11,59 @@
     data-reactions-enabled="{{ site.giscus.reactions-enabled }}"
     data-emit-metadata="{{ site.giscus.emit-metadata }}"
     data-input-position="{{ site.giscus.input-position }}"
-    data-theme="preferred_color_scheme"
+    data-theme="dark"
     data-lang="{{ site.giscus.lang }}"
     crossorigin="anonymous"
     async>
   </script>
 </div>
+
+<script>
+// Function to update Giscus theme based on Jekyll theme
+function updateGiscusTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const giscusFrame = document.querySelector('iframe.giscus-frame');
+  
+  if (giscusFrame) {
+    const giscusTheme = currentTheme === 'dark' ? 'dark' : 'light';
+    giscusFrame.contentWindow.postMessage({
+      giscus: {
+        setConfig: {
+          theme: giscusTheme
+        }
+      }
+    }, 'https://giscus.app');
+    console.log('Updated Giscus theme to:', giscusTheme);
+  }
+}
+
+// Set initial theme when Giscus loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait for Giscus to load, then set initial theme
+  setTimeout(updateGiscusTheme, 1000);
+  
+  // Also try updating theme when iframe loads
+  const checkForGiscus = setInterval(() => {
+    if (document.querySelector('iframe.giscus-frame')) {
+      updateGiscusTheme();
+      clearInterval(checkForGiscus);
+    }
+  }, 500);
+});
+
+// Watch for theme changes on the document element
+const observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+      setTimeout(updateGiscusTheme, 100); // Small delay to ensure theme change is complete
+    }
+  });
+});
+
+// Start observing theme changes
+observer.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['data-theme']
+});
+</script>
 {% endif %}
