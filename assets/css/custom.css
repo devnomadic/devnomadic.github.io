@@ -192,3 +192,27 @@
     margin-bottom: 0.5em;
   }
 }
+
+/* Giscus comments styling */
+.comments {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e8eaed;
+}
+
+.giscus-comments {
+  margin: 1rem 0;
+}
+
+/* Ensure Giscus adapts to theme */
+.giscus-frame {
+  width: 100% !important;
+  border: none;
+}
+
+/* Dark mode support for Giscus if needed */
+@media (prefers-color-scheme: dark) {
+  .comments {
+    border-top-color: #3c4043;
+  }
+}
