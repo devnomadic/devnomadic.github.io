@@ -210,7 +210,7 @@
   border: none;
 }
 
-/* Dark mode support for Giscus if needed */
+/* Dark mode support for Giscus */
 @media (prefers-color-scheme: dark) {
   .comments {
     border-top-color: #3c4043;
