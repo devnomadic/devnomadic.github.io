@@ -27,6 +27,19 @@ plugins:
 mermaid:
   src: 'https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js'
 
+# Giscus comments configuration
+giscus:
+  repo: "devnomadic/devnomadic.github.io"
+  repo-id: "MDEwOlJlcG9zaXRvcnkyOTYyMjkxOTE="  # Get this from giscus.app
+  category: "General"
+  category-id: "DIC_kwDOEagZR84CtcBV"  # Get this from giscus.app
+  mapping: "pathname"
+  reactions-enabled: "1"
+  emit-metadata: "0"
+  input-position: "bottom"
+  theme: "preferred_color_scheme"
+  lang: "en"
+
 # Theme settings
 dash:
   date_format: "%b %-d, %Y"

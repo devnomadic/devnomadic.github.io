@@ -28,9 +28,9 @@ layout: default
   {{ content }}
 </div>
 
-{% if site.dash.disqus.shortname %}
+{% if site.giscus and site.giscus.repo %}
 <div class="comments">
-{% include disqus.html %}
+{% include giscus.html %}
 </div>
 {% endif %}
 
