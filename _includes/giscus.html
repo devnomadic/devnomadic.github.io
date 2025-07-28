@@ -1,27 +1,35 @@
 {% if site.giscus and site.giscus.repo %}
 <div class="giscus-comments">
-  <script 
-    src="https://giscus.app/client.js"
-    data-repo="{{ site.giscus.repo }}"
-    data-repo-id="{{ site.giscus.repo-id }}"
-    data-category="{{ site.giscus.category }}"
-    data-category-id="{{ site.giscus.category-id }}"
-    data-mapping="{{ site.giscus.mapping }}"
-    data-strict="0"
-    data-reactions-enabled="{{ site.giscus.reactions-enabled }}"
-    data-emit-metadata="{{ site.giscus.emit-metadata }}"
-    data-input-position="{{ site.giscus.input-position }}"
-    data-theme="dark"
-    data-lang="{{ site.giscus.lang }}"
-    crossorigin="anonymous"
-    async>
+  <script>
+    // Get the current theme from localStorage or default to dark
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    
+    // Create the Giscus script with the correct initial theme
+    const giscusScript = document.createElement('script');
+    giscusScript.src = 'https://giscus.app/client.js';
+    giscusScript.setAttribute('data-repo', '{{ site.giscus.repo }}');
+    giscusScript.setAttribute('data-repo-id', '{{ site.giscus.repo-id }}');
+    giscusScript.setAttribute('data-category', '{{ site.giscus.category }}');
+    giscusScript.setAttribute('data-category-id', '{{ site.giscus.category-id }}');
+    giscusScript.setAttribute('data-mapping', '{{ site.giscus.mapping }}');
+    giscusScript.setAttribute('data-strict', '0');
+    giscusScript.setAttribute('data-reactions-enabled', '{{ site.giscus.reactions-enabled }}');
+    giscusScript.setAttribute('data-emit-metadata', '{{ site.giscus.emit-metadata }}');
+    giscusScript.setAttribute('data-input-position', '{{ site.giscus.input-position }}');
+    giscusScript.setAttribute('data-theme', currentTheme);
+    giscusScript.setAttribute('data-lang', '{{ site.giscus.lang }}');
+    giscusScript.setAttribute('crossorigin', 'anonymous');
+    giscusScript.async = true;
+    
+    // Append the script to load Giscus with the correct theme
+    document.currentScript.parentNode.insertBefore(giscusScript, document.currentScript);
   </script>
 </div>
 
 <script>
 // Function to update Giscus theme based on Jekyll theme
 function updateGiscusTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme') || 'dark';
   const giscusFrame = document.querySelector('iframe.giscus-frame');
   
   if (giscusFrame) {
@@ -39,16 +47,16 @@ function updateGiscusTheme() {
 
 // Set initial theme when Giscus loads
 document.addEventListener('DOMContentLoaded', function() {
-  // Wait for Giscus to load, then set initial theme
-  setTimeout(updateGiscusTheme, 1000);
-  
-  // Also try updating theme when iframe loads
+  // Check multiple times to catch when Giscus iframe loads
   const checkForGiscus = setInterval(() => {
     if (document.querySelector('iframe.giscus-frame')) {
       updateGiscusTheme();
       clearInterval(checkForGiscus);
     }
-  }, 500);
+  }, 100);
+  
+  // Stop checking after 10 seconds
+  setTimeout(() => clearInterval(checkForGiscus), 10000);
 });
 
 // Watch for theme changes on the document element

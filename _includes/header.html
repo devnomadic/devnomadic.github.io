@@ -11,24 +11,6 @@
         {% endfor %}
     </span>
     
-    <!-- Theme Toggle -->
-    <div class="toggleWrapper">
-        <input type="checkbox" class="dn" id="theme-toggle" onclick="modeSwitcher()" checked />
-        <label for="theme-toggle" class="toggle">
-        <span class="toggle__handler">
-          <span class="crater crater--1"></span>
-          <span class="crater crater--2"></span>
-          <span class="crater crater--3"></span>
-        </span>
-            <span class="star star--1"></span>
-            <span class="star star--2"></span>
-            <span class="star star--3"></span>
-            <span class="star star--4"></span>
-            <span class="star star--5"></span>
-            <span class="star star--6"></span>
-        </label>
-    </div>
-    
     <br style="clear: both;">
     <div style="margin-top: 0.5em; padding-top: 0.75em;">
       <a href="/about/" style="display: inline-block; margin-right: 2em; color: #de5684; text-decoration: none; font-size: 1em;">About</a>
@@ -39,49 +21,37 @@
 </div>
 
 <script type="text/javascript">
-const theme = localStorage.getItem('theme');
-
-if (theme === "light") {
-    document.documentElement.setAttribute('data-theme', 'light');
-} else {
-    document.documentElement.setAttribute('data-theme', 'dark');
-}
-const userPrefers = getComputedStyle(document.documentElement).getPropertyValue('content');
+// Get theme from localStorage, default to dark if not set
+const theme = localStorage.getItem('theme') || 'dark';
 
 function activateDarkTheme() {
-    document.getElementById('theme-toggle').checked = true;
     document.documentElement.setAttribute('data-theme', 'dark');
     document.documentElement.classList.add('theme--dark');
     document.documentElement.classList.remove('theme--light');
-	document.getElementById("theme-toggle").className = 'light';
-	window.localStorage.setItem('theme', 'dark');
+    window.localStorage.setItem('theme', 'dark');
 }
 
 function activateLightTheme() {
-    document.getElementById('theme-toggle').checked = false;
     document.documentElement.setAttribute('data-theme', 'light');
     document.documentElement.classList.add('theme--light');
     document.documentElement.classList.remove('theme--dark');
-	document.getElementById("theme-toggle").className = 'dark';
-	window.localStorage.setItem('theme', 'light');
+    window.localStorage.setItem('theme', 'light');
 }
 
-if (theme === "dark") {
-    activateDarkTheme();
-} else if (theme === "light") {
+// Apply theme immediately to prevent flash
+if (theme === "light") {
     activateLightTheme();
-} else if  (userPrefers === "light") {
-    activateDarkTheme();
 } else {
+    // Default to dark theme
     activateDarkTheme();
 }
 
 function modeSwitcher() {
-	let currentMode = document.documentElement.getAttribute('data-theme');
-	if (currentMode === "dark") {
-	    activateLightTheme();
-	} else {
-	    activateDarkTheme();
-	}
+    let currentMode = document.documentElement.getAttribute('data-theme');
+    if (currentMode === "dark") {
+        activateLightTheme();
+    } else {
+        activateDarkTheme();
+    }
 }
 </script>
